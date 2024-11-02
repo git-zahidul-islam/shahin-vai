@@ -308,8 +308,7 @@ async function run() {
      
     // });
 
-    // ssss
-
+    // this is right - zahid::: -7:10 pm
     app.post('/changeable', async (req, res) => {
       const salesData = req.body;
       const {
@@ -367,6 +366,7 @@ async function run() {
     app.get("/all-sales-data/:id", async (req, res) => {
       try {
         const query = req.params
+        console.log("inviice",query);
         const products = await salesCollections.findOne({ _id: new ObjectId(query) });
         res.status(200).json(products);
       } catch (error) {

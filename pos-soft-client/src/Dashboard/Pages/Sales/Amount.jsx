@@ -18,10 +18,6 @@ const Amount = () => {
         due: 0,
         totalDue: parseInt(selectedCustomer?.totalDue) || 0,
     });
-    console.log("rem-rem",remining);
-
-
-    console.log("hhhshshs",selectedCustomer);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -104,10 +100,10 @@ const Amount = () => {
 
         try {
             const salesResponse = await axios.post('http://localhost:5000/changeable', currentTransactionData);
-            console.log("i found the data",salesResponse.data);
+            console.log("i found the data",salesResponse?.data?.insertedId);
 
             if (salesResponse) {
-                const productId = salesResponse?.data?.productId;
+                const productId = salesResponse?.data?.insertedId;
                 setInvoiceId(productId);
 
                 Swal.fire({

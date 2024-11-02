@@ -69,8 +69,9 @@ const SalesInvoice = () => {
                             <span className="font-semibold">ইনভয়েজ নাম্বার:</span> {id}
                         </p>
                         <p>
-                            <span className="font-semibold">তারিখ :</span> {salesData?.creationDate.split('T')[0]},{' '}
-                            {salesData?.creationDate.split('T')[1].split('.')[0]}
+                            {/* <span className="font-semibold">তারিখ :</span> {salesData?.creationDate.split('T')[0]},{' '}
+                            {salesData?.creationDate.split('T')[1].split('.')[0]} */}
+                            12/12/2024  
                         </p>
                     </div>
                 </div>
