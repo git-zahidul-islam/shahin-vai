@@ -21,7 +21,7 @@ import AddCustomer from "../Dashboard/Pages/AddCustomer/AddCustomer";
 import SalesInvoice from "../Dashboard/Pages/SalesInvoice/SalesInvoice";
 import ProductsBuy from "../Dashboard/Pages/ProductsBuy/ProductsBuy"
 import PurchaseReport from "../Dashboard/Pages/PurchaseReport/PurchaseReport"
-import PurchaseReportDetails from "../Dashboard/Pages/PurchaseReport/PurchaseReport"
+import PurchaseReportDetails from "../Dashboard/Pages/PurchaseReportDetails/PurchaseReportDetails";
 
 
 export const router = createBrowserRouter([
