@@ -18,7 +18,7 @@ const SalesInvoice = () => {
         allSalesData();
     }, [id]);
 
-    // Dynamically import the `bd_number` package
+    // Dynamically import the bd_number package
     useEffect(() => {
         if (salesData?.totalAmount) {
             import('bd_number')
@@ -203,9 +203,9 @@ const SalesInvoice = () => {
                     </div>
                 </div>
 
-                {/* Footer */}
-
-                <div className="text-center items-baseline border-2 border-gray-800 bg-gray-200">
+               
+                {/* div 2 */}
+                <div className="text-center items-baseline border-2 border-gray-800 bg-gray-200 mt-8">
                     <p className="font-semibold py-[2px]">
                         আপনাকে ধন্যবাদ । আবার আসবেন !
                     </p>
