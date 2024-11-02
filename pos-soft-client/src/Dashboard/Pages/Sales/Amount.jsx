@@ -18,6 +18,7 @@ const Amount = () => {
         due: 0,
         totalDue: parseInt(selectedCustomer?.totalDue) || 0,
     });
+    console.log("rem-rem",remining);
 
 
     console.log("hhhshshs",selectedCustomer);
@@ -64,6 +65,12 @@ const Amount = () => {
     }, [formData.subtotal, formData.discount, formData.vat, formData.transport, formData.cashPaid, selectedCustomer]);
 
 
+    useEffect(()=>{
+        const totalAmountWithPreviousDue = parseInt(formData.totalAmount) + parseInt(selectedCustomer?.totalDue);
+        const remainAmount = totalAmountWithPreviousDue - parseInt(formData.cashPaid);
+        setRemining(remainAmount)
+    },[formData.cashPaid, formData.totalAmount, selectedCustomer?.totalDue])
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const id = selectedCustomer?.value;
@@ -72,9 +79,9 @@ const Amount = () => {
             return;
         }
 
-        const totalAmountWithPreviousDue = parseInt(formData.totalAmount) + parseInt(selectedCustomer?.totalDue);
-        const remainAmount = totalAmountWithPreviousDue - parseInt(formData.cashPaid);
-        setRemining(remainAmount)
+        // const totalAmountWithPreviousDue = parseInt(formData.totalAmount) + parseInt(selectedCustomer?.totalDue);
+        // const remainAmount = totalAmountWithPreviousDue - parseInt(formData.cashPaid);
+        // setRemining(remainAmount)
 
         // upper code is here
 
@@ -89,7 +96,8 @@ const Amount = () => {
             cashPaid: formData.cashPaid,
             // totalDue: formData.totalDue,
             products: productsDetails,
-            totaldue: parseInt(remainAmount),
+            // before have remainAmount - if work not chabge:: [zahid-7:04pm]
+            totaldue: parseInt(remining),
             customerId: id,
             ...customerData,
         };
@@ -217,7 +225,7 @@ const Amount = () => {
                                 type="number"
                                 id="previousDue"
                                 name="previousDue"
-                                value={formData.totalDue}
+                                value={remining}
                                 readOnly
                                 className="border p-1 rounded w-full outline-none bg-black/50"
                             />
