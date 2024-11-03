@@ -46,7 +46,7 @@ const PurchaseReport = () => {
             {data.map((item, index) => (
               <tr key={index}>
                 <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900 border border-gray-300">
-                  {item.index}
+                  {index + 1}
                 </td>
                 <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500 border border-gray-300">
                   {item.companyName}
@@ -58,10 +58,10 @@ const PurchaseReport = () => {
                   {item.moneyGiven}
                 </td>
                 <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-500 border border-gray-300">
-                  {item.remaining}
+                  {parseInt(item.payableMoney) - parseInt(item.moneyGiven)}
                 </td>
                 <td className="px-4 py-2 whitespace-nowrap text-sm border border-gray-300">
-                 <Link className="text-blue-600 hover:text-blue-900" to={`/dashboard/purchase-report/${item.id}`}>Details</Link>
+                 <Link className="text-blue-600 hover:text-blue-900" to={`/dashboard/purchase-report/${item._id}`}>Details</Link>
                 </td>
               </tr>
             ))}

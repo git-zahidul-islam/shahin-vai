@@ -378,7 +378,6 @@ async function run() {
     app.post('/company-products', async (req, res) => {
       try {
         const productsBuy = req.body;
-        console.log(productsBuy);
 
         const result = await productsBuyCollections.insertOne(productsBuy);
 
@@ -396,19 +395,8 @@ async function run() {
       try {
         // Fetch all purchase data
         const purchases = await productsBuyCollections.find({}).toArray();
-
-        // Process the data and calculate 'বাকি'
-        const purchaseReport = purchases.map((purchase, index) => ({
-          id: purchase._id,
-          index: index + 1,
-          companyName: purchase.companyDetails.companyName,
-          payableMoney: purchase.companyDetails.payableMoney,
-          moneyGiven: purchase.companyDetails.moneyGiven,
-          remaining: purchase.companyDetails.payableMoney - purchase.companyDetails.moneyGiven,
-        }));
-
         // Send the processed data back as JSON
-        res.json(purchaseReport);
+        res.json(purchases);
       } catch (err) {
         console.error(err);
         res.status(500).send('Internal Server Error');
