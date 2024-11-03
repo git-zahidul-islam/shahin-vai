@@ -10,6 +10,8 @@ const PurchaseReportDetails = () => {
     payable: ''
   })
 
+  const [refetch,setRefetch] = useState(false)
+
   console.log(products);
   const companyAmmount = products;
   const due = companyAmmount?.payableMoney - companyAmmount?.moneyGiven
@@ -25,7 +27,7 @@ const PurchaseReportDetails = () => {
     };
     
     fetchData();
-  }, [id]);
+  }, [id,refetch]);
 
   const handleUpdate = async () => {
     if (payAmount <= 0) {
@@ -51,6 +53,16 @@ const PurchaseReportDetails = () => {
     try {
       const res = await axios.put(`http://localhost:5000/update-pay-amount/${id}`,{payAmount})
     const result = res.data
+    if(res.data){
+      Swal.fire({
+        title: 'success!',
+        text: `জমা হয়েছে`,
+        icon: 'success',
+        timer: 5000
+    });
+      setRefetch(!refetch)
+      SetPayAmount({payable:''});
+    }
     console.log(result);
     console.log(result);
     } catch (error) {
