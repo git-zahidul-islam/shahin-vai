@@ -19,6 +19,35 @@ const Amount = () => {
         totalDue: parseInt(selectedCustomer?.totalDue) || 0,
     });
 
+    // useEffect(() => {
+    //     if (remining < 0) {
+    //         // formData.cashPaid = 0
+    //         setFormData({cashPaid: 0})
+    //         Swal.fire({
+    //             title: 'Error!',
+    //             text: 'Remaining amount cannot be negative.',
+    //             icon: 'error',
+    //             timer: 2500
+    //         });
+    //     }
+    // }, [remining]);
+
+    useEffect(() => {
+        if (remining < 0) {
+            setFormData((prevData) => ({
+                ...prevData,
+                cashPaid: 0 // Reset cashPaid if it causes negative remaining
+            }));
+            Swal.fire({
+                title: 'Error!',
+                text: `মোট বাকী টাকার বেশি দিতে পারবেন না। আপনি অতিরিক্ত দিয়েছেন ${remining} টাকা`,
+                icon: 'error',
+                timer: 10000
+            });
+        }
+    }, [remining]);
+
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
