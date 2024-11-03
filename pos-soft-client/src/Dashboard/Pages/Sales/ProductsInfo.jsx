@@ -3,6 +3,7 @@ import Select from "react-select";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../provider/useAuth";
+import Swal from "sweetalert2";
 
 const ProductsInfo = () => {
     const [selectedProduct, setSelectedProduct] = useState(null);
@@ -63,6 +64,16 @@ const ProductsInfo = () => {
 
     // Handle Add to Cart button click
     const handleAddToCart = async () => {
+        if (formData.qty <= 0) {
+            Swal.fire({
+                title: 'Error!',
+                text: `প্রোডাক্টের পরিমাণ দিন।`,
+                icon: 'error',
+                timer: 5000
+            });
+            return;
+        }
+
         const newStock = formData.stock;
 
         setProductsDetails((prevDetails) => [

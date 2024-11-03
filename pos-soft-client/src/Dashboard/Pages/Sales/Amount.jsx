@@ -19,19 +19,6 @@ const Amount = () => {
         totalDue: parseInt(selectedCustomer?.totalDue) || 0,
     });
 
-    // useEffect(() => {
-    //     if (remining < 0) {
-    //         // formData.cashPaid = 0
-    //         setFormData({cashPaid: 0})
-    //         Swal.fire({
-    //             title: 'Error!',
-    //             text: 'Remaining amount cannot be negative.',
-    //             icon: 'error',
-    //             timer: 2500
-    //         });
-    //     }
-    // }, [remining]);
-
     useEffect(() => {
         if (remining < 0) {
             setFormData((prevData) => ({
@@ -98,6 +85,16 @@ const Amount = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (formData.cashPaid <= 0) {
+            Swal.fire({
+                title: 'Error!',
+                text: `জমা ছাড়া প্রোডাক্ট বিক্রি করা সম্ভব না`,
+                icon: 'error',
+                timer: 5000
+            });
+            return;
+        }
+
         const id = selectedCustomer?.value;
         if (!id) {
             console.warn("Customer ID is missing or invalid.");
