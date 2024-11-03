@@ -431,7 +431,41 @@ async function run() {
 
     });
 
-
+    // update pay ammount
+    app.put('/update-pay-amount/:id', async (req, res) => {
+      const { id } = req.params;
+      const payableAmount = req.body; // Assuming you send { payableAmount: value }
+    
+      console.log('Payable Amount:', payableAmount);
+    
+      try {
+        // Step 1: Find the existing document
+        const existingData = await productsBuyCollections.findOne({ _id: new ObjectId(id) });
+        
+        // Step 2: Check if the document exists
+        if (!existingData) {
+          return res.status(404).json({ message: 'Product not found' });
+        }
+    
+        // Step 3: Calculate the new moneyGiven
+        const newMoneyGiven = parseFloat(existingData.moneyGiven) + parseFloat(payableAmount.payAmount);
+    
+        // Step 4: Update the document with the new moneyGiven
+        const updatedData = await productsBuyCollections.findOneAndUpdate(
+          { _id: new ObjectId(id) },
+          { $set: { moneyGiven: newMoneyGiven } },
+          { new: true } // This option returns the modified document
+        );
+    
+        // Step 5: Return a success response
+        res.status(200).json({ message: 'Money given updated successfully', updatedData });
+    
+      } catch (error) {
+        console.error('Error updating the pay amount:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+      }
+    });
+    
 
   } finally {
 
