@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 
 export default function CustomerTable() {
     const [customers, setCustomers] = useState([]);
-    const [searchQuery, setSearchQuery] = useState("");
+
+    console.log(customers);
 
     // Fetching data from MongoDB via an API
     useEffect(() => {
@@ -12,7 +13,6 @@ export default function CustomerTable() {
             try {
                 const response = await axios.get('http://localhost:5000/customers-info');
                 setCustomers(response.data);
-                console.log(response.data);
             } catch (error) {
                 console.error("Error fetching customer data:", error);
             }
@@ -20,25 +20,7 @@ export default function CustomerTable() {
         fetchCustomers();
     }, []);
 
-    // Handle search
-    const filteredCustomers = customers.filter(customer =>
-        customer.label && customer.label.toLowerCase().includes(searchQuery.toLowerCase())
-    );
 
-    const getProductSummary = (products) => {
-
-        const productNames = products.map(product => product.product).join(', ');
-        const totalQty = products.map(product => product.qty).join(', ');
-        const totalRate = products.map(product => product.rate).join(', ');
-        const totalAmount = products.reduce((sum, product) => sum + Number(product.total), 0);
-
-        return {
-            productNames,
-            totalQty,
-            totalRate,
-            totalAmount,
-        };
-    };
 
     return (
         <div className="container mx-auto p-4">
@@ -48,8 +30,6 @@ export default function CustomerTable() {
             <input
                 type="text"
                 placeholder="Search by name"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full p-3 mb-4 border border-red-700 rounded-lg shadow-sm bg-red-200 text-black"
             />
 
@@ -63,32 +43,28 @@ export default function CustomerTable() {
                             <th className="py-3 px-6 text-left">মোবাইল</th>
                             <th className="py-3 px-6 text-left">ঠিকানা</th>
                             <th className="py-3 px-6 text-left">মোট বাকী</th>
-                            <th className="py-3 px-6 text-left">জমা </th>
+                            {/* <th className="py-3 px-6 text-left">জমা </th> */}
                             <th className="py-3 px-6 text-left">বিবরণ </th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        {filteredCustomers.map((customer, index) => {
-                            const { _id, mobile, label, address, due } = getProductSummary(customer.products);
-
-                            return (
-                                <tr key={customer._id} className="bg-gray-100">
-                                    <td className="py-3 px-6">{index + 1}</td>
-                                    <td className="py-3 px-6">{label}</td>
-                                    <td className="py-3 px-6">{mobile}</td>
-                                    <td className="py-3 px-6">{address}</td>
-                                    <td className="py-3 px-6">{due}</td>
-                                    <td>
-                                        <input type="text" className='w-[50%] border-lime-200 border-2 p-2 rounded-md' name="joma" id="" />
-                                        <span className='bg-lime-400 ml-3 p-2'>জমা করুন </span>
-                                    </td>
-                                    <td>
-                                        <Link to={`customer-details/${_id}`} className='bg-lime-400 p-2'>সব দেখুন </Link>
-                                    </td>
-                                </tr>
-                            );
-                        })}
+                        {
+                            customers.map((customer,index) => {
+                                return(
+                                    <tr key={customer._id} className="bg-gray-100">
+                            <td className="py-3 px-6">{index +1}</td>
+                            <td className="py-3 px-6">{customer.customerData?.label}</td>
+                            <td className="py-3 px-6">{customer.customerData?.mobile}</td>
+                            <td className="py-3 px-6">{customer.customerData?.address}</td>
+                            <td className="py-3 px-6">{customer.due}</td>
+                            <td>
+                                <Link to={`/dashboard/customer-info/${customer._id}`} className='bg-lime-400 p-2'>সব দেখুন </Link>
+                            </td>
+                        </tr>
+                                )
+                            })
+                        }
                     </tbody>
                 </table>
             </div>

@@ -352,11 +352,11 @@ async function run() {
 
 
 
-    // Fetch customers info for table data show.
+    // Fetch customers info for table data show. ::: zahid
     app.get("/customers-info", async (req, res) => {
       try {
-        const products = await salesCollections.find({}).sort({ creationDate: -1 }).toArray();
-        res.status(200).json(products);
+        const products = await salesCollections.find().toArray();
+        res.status(200).send(products);
       } catch (error) {
         res.status(500).json({ error: "Failed to fetch products info" });
       }
