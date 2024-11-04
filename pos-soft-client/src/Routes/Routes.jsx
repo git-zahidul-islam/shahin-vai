@@ -22,6 +22,7 @@ import SalesInvoice from "../Dashboard/Pages/SalesInvoice/SalesInvoice";
 import ProductsBuy from "../Dashboard/Pages/ProductsBuy/ProductsBuy"
 import PurchaseReport from "../Dashboard/Pages/PurchaseReport/PurchaseReport"
 import PurchaseReportDetails from "../Dashboard/Pages/PurchaseReportDetails/PurchaseReportDetails";
+import CustomerInfoDetails from "../Dashboard/Pages/CustomerInfo/CustomerInfoDetails";
 
 
 export const router = createBrowserRouter([
@@ -80,6 +81,10 @@ export const router = createBrowserRouter([
             {
                 path: 'customer-info',
                 element: <CustomerInfo />
+            },
+            {
+                path: 'customer-info/:id',
+                element: <CustomerInfoDetails />
             },
             {
                 path: 'add-return',

@@ -362,6 +362,17 @@ async function run() {
       }
     });
 
+    // customer details ::: zahid - 
+    app.get("/customers-info/:id", async (req, res) => {
+      const {id} = req.params;
+      try {
+        const products = await salesCollections.findOne({_id: new ObjectId(id)})
+        res.status(200).send(products);
+      } catch (error) {
+        res.status(500).json({ error: "Failed to fetch products info" });
+      }
+    });
+
     // Fetch all sales info for table data show.
     app.get("/all-sales-data/:id", async (req, res) => {
       try {
