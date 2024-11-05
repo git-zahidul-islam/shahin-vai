@@ -1,11 +1,13 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 export default function CustomerTable() {
     const [customers, setCustomers] = useState([]);
+    const [payammount,setPayammount] = useState('')
+    const [fetch,setFetch] = useState(false)
 
-    console.log(customers);
 
     // Fetching data from MongoDB via an API
     useEffect(() => {
@@ -18,9 +20,47 @@ export default function CustomerTable() {
             }
         }
         fetchCustomers();
-    }, []);
+    }, [fetch]);
 
+    const handlePay = async (id,due) => {
+        console.log(due);
+        console.log(payammount);
 
+        // Check if payammount is more than due
+    if (payammount > due) {
+        Swal.fire({
+            title: "Wait!",
+            text: "Payment amount cannot exceed the due amount.",
+            icon: "error"
+        });
+        return;
+    }
+
+    // Check if payammount is valid (not negative or zero)
+    if (payammount <= 0) {
+        Swal.fire({
+            title: "Wait!",
+            text: "Please enter a valid payment amount.",
+            icon: "error"
+        });
+        return;
+    }
+        try {
+            const res = await axios.put(`http://localhost:5000/customer-pay/${id}`, { payammount });
+            console.log(res.data);
+            if(res.data.result.modifiedCount > 0){
+                setFetch(!fetch)
+                Swal.fire({
+                    title: "Wait!",
+                    text: "Pay Successfully",
+                    icon: "success"
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    
 
     return (
         <div className="container mx-auto p-4">
@@ -43,7 +83,7 @@ export default function CustomerTable() {
                             <th className="py-3 px-6 text-left">মোবাইল</th>
                             <th className="py-3 px-6 text-left">ঠিকানা</th>
                             <th className="py-3 px-6 text-left">মোট বাকী</th>
-                            {/* <th className="py-3 px-6 text-left">জমা </th> */}
+                            <th className="py-3 px-6 text-left">জমা </th>
                             <th className="py-3 px-6 text-left">বিবরণ </th>
                         </tr>
                     </thead>
@@ -58,6 +98,10 @@ export default function CustomerTable() {
                             <td className="py-3 px-6">{customer.customerData?.mobile}</td>
                             <td className="py-3 px-6">{customer.customerData?.address}</td>
                             <td className="py-3 px-6">{customer.due}</td>
+                            <td className="py-3 px-6 flex">
+                                <input className='w-32' type="number" onChange={(e) => setPayammount(e.target.value)} />
+                                <button onClick={()=>handlePay(customer._id,customer.due)} className='bg-red-500 px-2 text-white ml-2 w-1/3'>Pay</button>
+                            </td>
                             <td>
                                 <Link to={`/dashboard/customer-info/${customer._id}`} className='bg-lime-400 p-2'>সব দেখুন </Link>
                             </td>

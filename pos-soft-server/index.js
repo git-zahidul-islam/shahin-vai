@@ -373,6 +373,40 @@ async function run() {
       }
     });
 
+    // pay ammount
+    app.put("/customer-pay/:id", async (req, res) => {
+        const { id } = req.params;
+        const { payammount } = req.body; // Destructure payammount directly
+    
+        try {
+            const customer = await salesCollections.findOne({ _id: new ObjectId(id) });
+    
+            // Check if the customer exists
+            if (!customer) {
+                return res.status(404).json({ message: "Customer not found" });
+            }
+    
+            // Calculate the new totalDue (use `customer.due`)
+            const updatedTotalDue = customer.due - Number(payammount);
+    
+            // Ensure totalDue doesn't go negative
+            const newTotalDue = updatedTotalDue < 0 ? 0 : updatedTotalDue;
+    
+            const filter = { _id: new ObjectId(id) };
+            const updatedUser = {
+                $set: { due: newTotalDue }
+            };
+    
+            // Update the totalDue in the database
+            const result = await salesCollections.updateOne(filter, updatedUser);
+    
+            res.status(200).json({ message: "Updated successfully", result });
+        } catch (error) {
+            res.status(500).json({ message: "Error updating payment", error });
+        }
+    });
+    
+
     // Fetch all sales info for table data show.
     app.get("/all-sales-data/:id", async (req, res) => {
       try {
