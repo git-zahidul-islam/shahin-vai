@@ -110,11 +110,11 @@ export default function CustomerTable() {
                             <td className="py-3 px-6">{customer.customerData?.address}</td>
                             <td className="py-3 px-6">{customer.due}</td>
                             <td className="py-3 px-6 flex">
-                                <input className='w-32' type="number" onChange={(e) => setPayammount(e.target.value)} />
-                                <button onClick={()=>handlePay(customer._id,customer.due)} className='bg-red-500 px-2 text-white ml-2 w-1/3'>Pay</button>
+                                <input className='w-32 border border-red-600/65 outline-none p-1' type="number" onChange={(e) => setPayammount(e.target.value)} />
+                                <button onClick={()=>handlePay(customer._id,customer.due)} className='bg-red-500 px-3 py-2 text-white ml-2 w-1/3'>Pay</button>
                             </td>
                             <td>
-                                <Link to={`/dashboard/customer-info/${customer._id}`} className='bg-lime-400 p-2'>সব দেখুন </Link>
+                                <Link to={`/dashboard/customer-info/${customer._id}`} className='bg-[#e94374f5] text-white font-semibold px-3 py-2 mt-2 rounded-md'>সব দেখুন </Link>
                             </td>
                         </tr>
                                 )

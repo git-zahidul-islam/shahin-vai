@@ -61,7 +61,7 @@ const PurchaseReport = () => {
                   {parseInt(item.payableMoney) - parseInt(item.moneyGiven)}
                 </td>
                 <td className="px-4 py-2 whitespace-nowrap text-sm border border-gray-300">
-                 <Link className="text-blue-600 hover:text-blue-900" to={`/dashboard/purchase-report/${item._id}`}>Details</Link>
+                 <Link className="bg-[#e94374f5] text-white font-semibold px-3 py-2 mt-2 rounded-md" to={`/dashboard/purchase-report/${item._id}`}>Details</Link>
                 </td>
               </tr>
             ))}

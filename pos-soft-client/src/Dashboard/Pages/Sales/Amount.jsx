@@ -259,7 +259,7 @@ const Amount = () => {
                             </button>
                             </div> */}
 
-                        <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">Save</button>
+                        <button type="submit" className="bg-[#e94374f5] text-white font-semibold px-3 py-2 mt-2 rounded-md">বিক্রি নিশ্চিত করুন</button>
                     </div>
                 </form>
             </div>

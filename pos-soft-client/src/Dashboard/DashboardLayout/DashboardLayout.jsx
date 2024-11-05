@@ -9,7 +9,7 @@ const DashboardLayout = () => {
                     <li><Link to='sales'>বিক্রয় এন্ট্রি</Link></li>
                     <li><Link to='add-product'>পণ্য যোগ করুন</Link></li>
                     <li><Link to="products-list">সকল পণ্য</Link></li>
-                    <li><Link>সকল বিক্রয় রিপোর্ট</Link></li>
+                    <li><Link to='all-sales-report'>সকল বিক্রয় রিপোর্ট</Link></li>
                     <li><Link to='customer-info'>গ্রাহক রিপোর্ট</Link></li>
                     <li><Link to='products-buy'>Products Buy</Link></li>
                     <li><Link to='purchase-report'>ক্রয় পন্যের রিপোর্ট</Link></li>

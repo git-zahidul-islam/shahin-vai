@@ -124,17 +124,16 @@ async function run() {
     });
     // All products show api here.(report)
     app.get("/products-report", async (req, res) => {
-      const { category } = req.query; // Get the category from query params
+      const { category } = req.query;
 
       try {
-        let query = {}; // Default empty query
+        let query = {};
 
-        // If category is provided, filter by category
         if (category) {
           query.productCategory = category;
         }
 
-        const products = await productCollections.find(query).toArray(); // Fetch products based on query
+        const products = await productCollections.find(query).toArray();
         res.json(products);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -510,6 +509,40 @@ async function run() {
         res.status(500).json({ message: 'Internal Server Error' });
       }
     });
+
+     // Admin home page api's here........
+     app.get('/api/dashboard-counts', async (req, res) => {
+      try {
+        const userCount = await userCollections.estimatedDocumentCount();
+        const productCount = await productCollections.estimatedDocumentCount();
+        const customerCount = await customerCollections.estimatedDocumentCount();
+        const salesCount = await salesCollections.estimatedDocumentCount();
+        const productsBuyCount = await productsBuyCollections.estimatedDocumentCount();
+        res.send({
+          userCount,
+          productCount,
+          customerCount,
+          salesCount,
+          productsBuyCount,
+        });
+      } catch (error) {
+        console.error('Error fetching counts:', error);
+        res.status(500).json({ message: 'Error fetching counts' });
+      }
+    });
+
+
+    
+// All sales report show here........
+app.get('/sales-report', async (req, res) => {
+  try {
+    const salesData = await salesCollections.find({}).toArray();
+    res.json(salesData);
+  } catch (error) {
+    console.error("Error fetching sales data:", error);
+    res.status(500).send("Error fetching sales data");
+  }
+});
     
 
   } finally {

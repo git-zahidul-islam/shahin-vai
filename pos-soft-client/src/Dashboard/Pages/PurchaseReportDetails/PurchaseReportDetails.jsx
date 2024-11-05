@@ -78,7 +78,7 @@ const PurchaseReportDetails = () => {
       <div className="mb-6 bg-gray-100 p-4 rounded-lg shadow space-y-3">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-semibold mb-2">Payment Summary</h2>
-          <button disabled={products?.payableMoney == products?.moneyGiven} onClick={handleUpdate} className={`p-2 ${products?.payableMoney == products?.moneyGiven ? "bg-gray-400 cursor-wait" : "bg-green-400" }`}>
+          <button disabled={products?.payableMoney == products?.moneyGiven} onClick={handleUpdate} className={`p-2 ${products?.payableMoney == products?.moneyGiven ? "bg-gray-400 cursor-wait text-white font-semibold px-3 py-2 mt-2 rounded-md" : "bg-[#e94374f5] text-white font-semibold px-3 py-2 mt-2 rounded-md" }`}>
             Give money
           </button>
         </div>
@@ -98,7 +98,7 @@ const PurchaseReportDetails = () => {
             <p>Pay Money</p>
             {
               products?.payableMoney == products?.moneyGiven
-              ? <p className="bg-green-500/70 px-2 py-1 text-white">বাকি নাই</p>
+              ? <p className="text-white font-semibold px-3 py-2 mt-2 rounded-md bg-[#e94374f5]">বাকি নাই</p>
               : <input
               disabled={products?.payableMoney == products?.moneyGiven}
                 type="text"

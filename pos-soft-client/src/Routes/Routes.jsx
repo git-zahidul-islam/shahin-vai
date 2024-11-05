@@ -119,6 +119,10 @@ export const router = createBrowserRouter([
                 path: 'purchase-report/:id',
                 element: <PurchaseReportDetails/>
             },
+            {
+                path: 'all-sales-report',
+                element: <AllSalesReport/>
+            },
         ]
 
     }
