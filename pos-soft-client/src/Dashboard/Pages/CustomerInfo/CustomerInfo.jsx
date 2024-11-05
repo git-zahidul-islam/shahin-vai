@@ -26,6 +26,15 @@ export default function CustomerTable() {
         console.log(due);
         console.log(payammount);
 
+        if (payammount == due) {
+            Swal.fire({
+                title: "Wait!",
+                text: "already paid",
+                icon: "error"
+            });
+            return;
+        }
+
         // Check if payammount is more than due
     if (payammount > due) {
         Swal.fire({
@@ -45,6 +54,8 @@ export default function CustomerTable() {
         });
         return;
     }
+
+    
         try {
             const res = await axios.put(`http://localhost:5000/customer-pay/${id}`, { payammount });
             console.log(res.data);
