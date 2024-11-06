@@ -8,6 +8,7 @@ import { FaSpinner } from 'react-icons/fa';
 const Login = () => {
     const { signIn, loading } = useContext(AuthContext);
     const navigate = useNavigate();
+    // const from = location.state?.from?.pathname || "/";
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -42,7 +43,7 @@ const Login = () => {
     }
 
     return (
-        <div className="hero bg-cover bg-[#004A29] py-[21px]">
+        <div className="hero h-[87vh] bg-cover bg-[#004A29] py-[21px]">
             <div className="hero-content flex flex-col lg:flex-row justify-center items-center">
                 <img
                     src={image}

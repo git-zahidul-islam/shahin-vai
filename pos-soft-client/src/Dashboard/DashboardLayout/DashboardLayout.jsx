@@ -1,6 +1,15 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { useAuth } from "../../provider/useAuth";
 
 const DashboardLayout = () => {
+    const {logOut} = useAuth();
+    const navigate = useNavigate()
+
+    const handleLogout = async () => {
+        await logOut()
+        navigate('/')
+    }
+
     return (
         <div className="flex">
             <div className="w-[15%] bg-[#dc4b76f5] min-h-screen ">
@@ -13,7 +22,7 @@ const DashboardLayout = () => {
                     <li><Link to='customer-info'>গ্রাহক রিপোর্ট</Link></li>
                     <li><Link to='products-buy'>Products Buy</Link></li>
                     <li><Link to='purchase-report'>ক্রয় পন্যের রিপোর্ট</Link></li>
-
+                    <li><button className="px-8 py-1 mt-10 bg-[#8d56668e] border" onClick={handleLogout}>Logout</button></li>
                 </ul>
             </div>
             <div className="w-[85%] pr-4">

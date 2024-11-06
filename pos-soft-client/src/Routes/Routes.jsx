@@ -23,6 +23,8 @@ import ProductsBuy from "../Dashboard/Pages/ProductsBuy/ProductsBuy"
 import PurchaseReport from "../Dashboard/Pages/PurchaseReport/PurchaseReport"
 import PurchaseReportDetails from "../Dashboard/Pages/PurchaseReportDetails/PurchaseReportDetails";
 import CustomerInfoDetails from "../Dashboard/Pages/CustomerInfo/CustomerInfoDetails";
+import PrivateRoute from "./PrivateRoute";
+import PublicPage from "./PrblicPage";
 
 
 export const router = createBrowserRouter([
@@ -33,11 +35,11 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: '/',
-                element: <Home />
+                element: <PublicPage><Home /></PublicPage>
             },
             {
                 path: 'update-product/:id',
-                element: <UpdateProduct />
+                element: <PrivateRoute><UpdateProduct /></PrivateRoute>
             },
         ]
     },
@@ -48,80 +50,80 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Dashboard />
+                element: <PrivateRoute><Dashboard /></PrivateRoute>
             },
             {
                 path: 'add-product',
-                element: <AddProducts />
+                element: <PrivateRoute><AddProducts /></PrivateRoute>
             },
             {
                 path: 'sales',
-                element: <Sales />
+                element: <PrivateRoute><Sales /></PrivateRoute>
             },
             {
                 path: 'sales-print/:id',
-                element: <SalesInvoice />
+                element: <PrivateRoute><SalesInvoice /></PrivateRoute>
             },
             {
                 path: 'sales-print/:id',  // Dynamic route for Sales Invoice
-                element: <SalesInvoice />
+                element: <PrivateRoute><SalesInvoice /></PrivateRoute>
               },
             {
                 path: 'all-products',
-                element: <AllProducts />
+                element: <PrivateRoute><AllProducts /></PrivateRoute>
             },
             {
                 path: 'all-return',
-                element: <AllReturn />
+                element: <PrivateRoute><AllReturn /></PrivateRoute>
             },
             {
                 path: 'all-sales-report',
-                element: <AllSalesReport />
+                element: <PrivateRoute><AllSalesReport /></PrivateRoute>
             },
             {
                 path: 'customer-info',
-                element: <CustomerInfo />
+                element: <PrivateRoute><CustomerInfo /></PrivateRoute>
             },
             {
                 path: 'customer-info/:id',
-                element: <CustomerInfoDetails />
+                element: <PrivateRoute><CustomerInfoDetails /></PrivateRoute>
             },
             {
                 path: 'add-return',
-                element: <ReturnProductsAdd />
+                element: <PrivateRoute><ReturnProductsAdd /></PrivateRoute>
             },
             {
                 path: 'sales-report',
-                element: <SalesReport />
+                element: <PrivateRoute><SalesReport /></PrivateRoute>
             },
             {
                 path: 'stock',
-                element: <Stock />
+                element: <PrivateRoute><Stock /></PrivateRoute>
             },
             {
                 path: 'products-list',
-                element: <ProductsList />
+                element: <PrivateRoute><ProductsList /></PrivateRoute>
             },
             {
                 path: 'add-customer',
-                element: <AddCustomer />
+                element: <PrivateRoute><AddCustomer /></PrivateRoute>
             },
             // this is products buy route
             {
                 path: 'products-buy',
-                element: <ProductsBuy/>
+                element: <PrivateRoute><ProductsBuy/></PrivateRoute>
             },
             {
                 path: 'purchase-report',
-                element: <PurchaseReport/>
+                element: <PrivateRoute><PurchaseReport/></PrivateRoute>
             },
             {
                 path: 'purchase-report/:id',
-                element: <PurchaseReportDetails/>
+                element: <PrivateRoute><PurchaseReportDetails/></PrivateRoute>
             },
             {
                 path: 'all-sales-report',
-                element: <AllSalesReport/>
+                element: <PrivateRoute> <AllSalesReport/></PrivateRoute>
             },
         ]
 
