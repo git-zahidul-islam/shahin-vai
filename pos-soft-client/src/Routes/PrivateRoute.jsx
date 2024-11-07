@@ -5,12 +5,11 @@ import { useAuth } from "../provider/useAuth";
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
   const location = useLocation();
-
   if (loading) {
     return <p>loading ..............</p>
   }
 
-
+  
 
   if (user) {
     return children;
