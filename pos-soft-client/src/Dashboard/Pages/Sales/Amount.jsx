@@ -11,10 +11,8 @@ const Amount = () => {
     const [formData, setFormData] = useState({
         subtotal: 0,
         discount: 0,
-        vat: 0,
-        transport: 0,
         totalAmount: 0,
-        cashPaid: 0,
+        cashPaid: '0',
         due: 0,
         totalDue: parseInt(selectedCustomer?.totalDue) || 0,
     });
@@ -62,10 +60,9 @@ const Amount = () => {
     }, [subtotalAmount]);
 
     useEffect(() => {
-        const { subtotal, discount, vat, transport, cashPaid } = formData;
+        const { subtotal, discount, cashPaid } = formData;
         const discountAmount = (subtotal * discount) / 100;
-        const vatAmount = (subtotal * vat) / 100;
-        const calculatedTotal = subtotal - discountAmount + vatAmount + transport;
+        const calculatedTotal = subtotal - discountAmount;
         const dueAmount = calculatedTotal - cashPaid;
 
         setFormData((prevData) => ({
@@ -74,7 +71,7 @@ const Amount = () => {
             due: dueAmount > 0 ? dueAmount : 0,
             totalDue: (dueAmount > 0 ? dueAmount : 0) + parseInt(selectedCustomer?.totalDue),
         }));
-    }, [formData.subtotal, formData.discount, formData.vat, formData.transport, formData.cashPaid, selectedCustomer]);
+    }, [formData.subtotal, formData.discount, formData.cashPaid, selectedCustomer]);
 
 
     useEffect(()=>{
@@ -112,8 +109,6 @@ const Amount = () => {
         const currentTransactionData = {
             subtotal: formData.subtotal,
             discount: formData.discount,
-            vat: formData.vat,
-            transport: formData.transport,
             totalAmount: formData.totalAmount,
             cashPaid: formData.cashPaid,
             // totalDue: formData.totalDue,
@@ -180,40 +175,11 @@ const Amount = () => {
                                     name="discount"
                                     value={formData.discount}
                                     onChange={handleInputChange}
-                                    placeholder="0"
+                                    placeholder="কমিশন"
                                     className="border p-1 rounded w-[90%]"
                                 />
                                 <span className="w-[10%]">%</span>
                             </div>
-                        </div>
-
-                        <div className="mb-1 flex items-center">
-                            <label htmlFor="vat" className="mr-2 w-[20%]">ভ্যাট</label>
-                            <div className="flex gap-2 w-[80%] items-center">
-                                <input
-                                    type="number"
-                                    id="vat"
-                                    name="vat"
-                                    value={formData.vat}
-                                    onChange={handleInputChange}
-                                    placeholder="0"
-                                    className="border p-1 rounded w-[90%]"
-                                />
-                                <span className="w-[10%]">%</span>
-                            </div>
-                        </div>
-
-                        <div className="mb-1">
-                            <label htmlFor="transport" className="mr-2">পরিবহন / লেবার খরচ</label>
-                            <input
-                                type="number"
-                                id="transport"
-                                name="transport"
-                                value={formData.transport}
-                                onChange={handleInputChange}
-                                placeholder="0"
-                                className="border p-1 rounded w-full"
-                            />
                         </div>
 
                         <div className="mb-1">
@@ -238,6 +204,7 @@ const Amount = () => {
                                 value={formData.cashPaid}
                                 onChange={handleInputChange}
                                 className="border p-1 rounded w-full"
+                                placeholder="ক্যাশ জমা"
                             />
                         </div>
 

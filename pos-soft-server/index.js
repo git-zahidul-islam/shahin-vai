@@ -154,8 +154,7 @@ async function run() {
           res.status(200).json({ message: 'Customer data updated successfully', updatedCustomer: updateResult });
         } else {
           const customerData = {
-            ...req.body,
-            creationDate: new Date(),
+            ...req.body
           };
           const result = await customerCollections.insertOne(customerData);
           res.status(201).json({ message: 'Customer added successfully', productId: result.insertedId });
@@ -474,33 +473,28 @@ async function run() {
 
     });
 
-    // update pay ammount
+    // update pay amount
     app.put('/update-pay-amount/:id', async (req, res) => {
       const { id } = req.params;
-      const payableAmount = req.body; // Assuming you send { payableAmount: value }
+      const payableAmount = req.body; 
+
     
       console.log('Payable Amount:', payableAmount);
     
       try {
-        // Step 1: Find the existing document
         const existingData = await productsBuyCollections.findOne({ _id: new ObjectId(id) });
         
-        // Step 2: Check if the document exists
         if (!existingData) {
           return res.status(404).json({ message: 'Product not found' });
         }
-    
-        // Step 3: Calculate the new moneyGiven
         const newMoneyGiven = parseFloat(existingData.moneyGiven) + parseFloat(payableAmount.payAmount);
     
-        // Step 4: Update the document with the new moneyGiven
         const updatedData = await productsBuyCollections.findOneAndUpdate(
           { _id: new ObjectId(id) },
           { $set: { moneyGiven: newMoneyGiven } },
-          { new: true } // This option returns the modified document
+          { new: true } 
         );
     
-        // Step 5: Return a success response
         res.status(200).json({ message: 'Money given updated successfully', updatedData });
     
       } catch (error) {
@@ -508,6 +502,7 @@ async function run() {
         res.status(500).json({ message: 'Internal Server Error' });
       }
     });
+    
 
      // Admin home page api's here........
      app.get('/api/dashboard-counts', async (req, res) => {

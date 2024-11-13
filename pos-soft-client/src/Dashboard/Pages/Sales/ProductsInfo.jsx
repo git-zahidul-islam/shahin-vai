@@ -10,9 +10,9 @@ const ProductsInfo = () => {
     const { productsDetails, setProductsDetails } = useAuth();
     const [formData, setFormData] = useState({
         product: "",
-        stock: 0,
-        rate: 0,
-        qty: 0,
+        stock: '',
+        rate: '',
+        qty: '',
     });
 
     const [products, setProducts] = useState([]);
@@ -136,6 +136,7 @@ const ProductsInfo = () => {
                         value={formData.stock}
                         onChange={handleInputChange}
                         className="border p-1 rounded w-[80%]"
+                        placeholder="স্টক"
                         readOnly
                     />
                 </div>
@@ -149,7 +150,7 @@ const ProductsInfo = () => {
                         type="number"
                         id="rate"
                         name="rate"
-                        value={formData.rate}
+                        // value={formData.rate}
                         onChange={handleInputChange}
                         placeholder="Rate"
                         className="border p-1 rounded w-[80%]"
@@ -165,7 +166,7 @@ const ProductsInfo = () => {
                         type="number"
                         id="qty"
                         name="qty"
-                        value={formData.qty}
+                        // value={formData.qty}
                         onChange={handleInputChange}
                         placeholder="Quantity"
                         className="border p-1 rounded w-[80%]"
