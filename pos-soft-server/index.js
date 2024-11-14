@@ -476,10 +476,8 @@ async function run() {
     // update pay amount
     app.put('/update-pay-amount/:id', async (req, res) => {
       const { id } = req.params;
-      const payableAmount = req.body; 
-
+      const body = req.body; 
     
-      console.log('Payable Amount:', payableAmount);
     
       try {
         const existingData = await productsBuyCollections.findOne({ _id: new ObjectId(id) });
@@ -487,11 +485,12 @@ async function run() {
         if (!existingData) {
           return res.status(404).json({ message: 'Product not found' });
         }
-        const newMoneyGiven = parseFloat(existingData.moneyGiven) + parseFloat(payableAmount.payAmount);
+
+        const newMoneyGiven = parseFloat(existingData.moneyGiven) + parseFloat(body.payAmount);
     
         const updatedData = await productsBuyCollections.findOneAndUpdate(
           { _id: new ObjectId(id) },
-          { $set: { moneyGiven: newMoneyGiven } },
+          { $set: { moneyGiven: newMoneyGiven, ...body }},
           { new: true } 
         );
     
@@ -502,7 +501,7 @@ async function run() {
         res.status(500).json({ message: 'Internal Server Error' });
       }
     });
-    
+
 
      // Admin home page api's here........
      app.get('/api/dashboard-counts', async (req, res) => {

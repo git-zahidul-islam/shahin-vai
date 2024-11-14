@@ -42,10 +42,16 @@ const PurchaseReportDetails = () => {
       return;
     }
 
+    const data = {
+      products,
+      payAmount,
+      selectedDate,
+    }
+
     try {
       const res = await axios.put(
         `http://localhost:5000/update-pay-amount/${id}`,
-        { payAmount, date: selectedDate }
+        data
       );
       if (res.data) {
         Swal.fire({
