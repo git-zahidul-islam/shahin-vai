@@ -445,6 +445,19 @@ async function run() {
       }
     });
 
+    // products buy report that show in company buy page
+    app.get('/company-buy-report', async (req, res) => {
+      try {
+        // Fetch all purchase data
+        const purchases = await productsBuyCollections.find({}).toArray();
+        // Send the processed data back as JSON
+        res.json(purchases);
+      } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+      }
+    });
+
     // single data 
     app.get('/single-product-report/:id', async (req, res) => {
       try {

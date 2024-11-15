@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
+import ProductsBuyReport from './ProductsBuyReport';
 
 const CompanyProductForm = () => {
   const {
@@ -10,45 +11,35 @@ const CompanyProductForm = () => {
     reset,
     formState: { errors },
   } = useForm();
-  const [selectedDate, setSelectedDate] = useState("");
+  // const [selectedDate, setSelectedDate] = useState("");
+  const [reface,setReface] = useState(false)
 
   const onSubmit = async (data) => {
-
-    if (data.moneyGiven > data.payableMoney) {
-      Swal.fire({
-        icon: 'error',
-        title: 'সতর্কীকরণ',
-        text: 'প্রদেয় অর্থের পরিমাণ বড় হতে পারবে না!',
-      });
-      return; // Exit the function to prevent submission
-    }
-
     const productsBuyDetails = {
       companyName: data.companyName,
       payableMoney: data.payableMoney,
       moneyGiven: data.moneyGiven,
-      date: selectedDate,  // Include date here
+      date: data.date,
     };
 
     try {
       const response = await axios.post('http://localhost:5000/company-products', productsBuyDetails);
-      console.log('Response from backend:', response.data);  // Log the response from backend
+      console.log('Response from backend:', response.data);
 
-
-      if(response.data.result.insertedId){
+      if (response.data.result.insertedId) {
+        setReface(true)
+        reset()
         Swal.fire({
           position: "top-end",
           icon: "success",
-          title: "সেভ হয়েছে । ",
+          title: "সেভ হয়েছে ।",
           showConfirmButton: false,
           timer: 1500,
         });
       }
-
     } catch (error) {
       console.error('Error submitting data:', error);
 
-      // Display error message if the request fails
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -57,14 +48,11 @@ const CompanyProductForm = () => {
     }
   };
 
-  // Handle date change
-  const handleDateChange = (e) => {
-    setSelectedDate(e.target.value);
-  };
 
   return (
-    <div className="mx-auto bg-red-200">
-      <form
+    <div className="mx-auto bg-red-200 min-h-screen">
+     <div>
+     <form
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-2 p-6 rounded-lg shadow-lg"
       >
@@ -95,7 +83,7 @@ const CompanyProductForm = () => {
               type="number"
               id="payableMoney"
               className="p-2 border border-gray-300 rounded"
-              {...register('payableMoney', { required: 'Payable Money is required' })}
+              {...register('payableMoney', { required: 'Payable Money is required', min: 1 })}
             />
             {errors.payableMoney && (
               <span className="text-red-500 text-sm">
@@ -106,13 +94,20 @@ const CompanyProductForm = () => {
 
           <div className="flex flex-col space-y-2">
             <label htmlFor="moneyGiven" className="font-medium">
-            moneyGiven
+              টাকা প্রদান করেছেন
             </label>
             <input
               type="number"
               id="moneyGiven"
               className="p-2 border border-gray-300 rounded"
-              {...register('moneyGiven', { required: 'Money Given is required' })}
+              {...register('moneyGiven', {
+                required: 'Money Given is required',
+                min: {
+                  value: 1,
+                  message: '০ টাকা দিতে পারবে না',
+                },
+                validate: (value) => value <= +document.getElementById("payableMoney").value || "ক্রয়কৃত করা টাকার বেশি দেওয়া যাবে না।"
+              })}
             />
             {errors.moneyGiven && (
               <span className="text-red-500 text-sm">
@@ -120,18 +115,23 @@ const CompanyProductForm = () => {
               </span>
             )}
           </div>
-
           <div className="flex flex-col space-y-2">
-            <label htmlFor="date" className="font-medium mr-5">তারিখ</label>
+            <label htmlFor="companyName" className="font-medium">
+              Date
+            </label>
             <input
               type="date"
               id="date"
-              name="date"
-              value={selectedDate}
-              onChange={handleDateChange}
               className="p-2 border border-gray-300 rounded"
+              {...register('date', { required: 'date is required' })}
             />
+            {errors.date && (
+              <span className="text-red-500 text-sm">
+                {errors.date.message}
+              </span>
+            )}
           </div>
+
         </div>
 
         <div className="flex justify-center mb-12">
@@ -143,6 +143,10 @@ const CompanyProductForm = () => {
           </button>
         </div>
       </form>
+     </div>
+
+     {/* table */}
+     <ProductsBuyReport reface={reface}></ProductsBuyReport>
     </div>
   );
 };
