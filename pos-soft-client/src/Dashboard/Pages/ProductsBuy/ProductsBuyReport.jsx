@@ -11,9 +11,6 @@ const UpdatePopup = ({ item, onClose, onUpdate }) => {
   const newData = item;
   const getId = newData._id;
 
-
-
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -24,9 +21,29 @@ const UpdatePopup = ({ item, onClose, onUpdate }) => {
     const id = getId;
     const data = formData;
 
+    const { payableMoney, moneyGiven } = data;
+
+    // ভ্যালিডেশন চেক
+    if (moneyGiven <= 0) {
+      Swal.fire({
+        title: "Error",
+        text: "Given Money ০ টাকা হতে পারবে না।",
+        icon: "error"
+      });
+      return;
+    }
+
+    if (parseInt(moneyGiven) > parseInt(payableMoney)) {
+      Swal.fire({
+        title: "Error",
+        text: "Given Money, Payable Money থেকে বেশি হতে পারবে না।",
+        icon: "error"
+      });
+      return;
+    }
+
     try {
       const res = await axios.put(`http://localhost:5000/payment-update/${id}`, data)
-      console.log("lst karpa", res.data);
       if (res.data.modifiedCount > 0) {
         Swal.fire({
           title: "WOW",
