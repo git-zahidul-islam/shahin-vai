@@ -489,15 +489,15 @@ async function run() {
     // update pay amount
     const { ObjectId } = require('mongodb');
 
-app.put('/update-pay-amount/:id', async (req, res) => {
-    const { id } = req.params;
-    const { payAmount, date } = req.body;
+    app.put('/update-pay-amount/:id', async (req, res) => {
+      const { id } = req.params;
+      const { payAmount, date } = req.body;
 
-    try {
+      try {
         // Find the existing record
         const existingData = await productsBuyCollections.findOne({ _id: new ObjectId(id) });
         if (!existingData) {
-            return res.status(404).json({ message: 'Product not found' });
+          return res.status(404).json({ message: 'Product not found' });
         }
 
         // Calculate the new moneyGiven value
@@ -505,8 +505,8 @@ app.put('/update-pay-amount/:id', async (req, res) => {
 
         // Create a new payment record
         const newPaymentRecord = {
-            amount: parseFloat(payAmount),
-            date
+          amount: parseFloat(payAmount),
+          date
         };
 
         // Append the new payment record to serilalPay array (create the array if it doesn't exist)
@@ -514,51 +514,82 @@ app.put('/update-pay-amount/:id', async (req, res) => {
 
         // Update the record in the database
         await productsBuyCollections.updateOne(
-            { _id: new ObjectId(id) },
-            {
-                $set: { 
-                    moneyGiven: newMoneyGiven,
-                    serilalPay: updatedSerilalPay,
-                },
-            }
+          { _id: new ObjectId(id) },
+          {
+            $set: {
+              moneyGiven: newMoneyGiven,
+              serilalPay: updatedSerilalPay,
+            },
+          }
         );
 
         // Send a success response
         res.status(200).json({
-            message: 'Payment updated successfully',
-            updatedData: {
-                moneyGiven: newMoneyGiven,
-                serilalPay: updatedSerilalPay,
-            },
+          message: 'Payment updated successfully',
+          updatedData: {
+            moneyGiven: newMoneyGiven,
+            serilalPay: updatedSerilalPay,
+          },
         });
-    } catch (error) {
+      } catch (error) {
         console.error('Error updating payment:', error);
         res.status(500).json({ message: 'Internal server error' });
-    }
-});
+      }
+    });
+
+
+    app.put('/payment-update/:id', async (req, res) => {
+      const { id } = req.params;
+      const { payableMoney, moneyGiven, date } = req.body;
+
+      try {
+        const existingData = await productsBuyCollections.findOne({ _id: new ObjectId(id) });
+        if (!existingData) {
+          return res.status(404).json({ message: 'Product not found' });
+        }
+
+        const updateMoneyGiven = parseInt(existingData.moneyGiven) + parseInt(moneyGiven);
+        const updatePayableMoney = parseInt(existingData.payableMoney) + parseInt(payableMoney);
+
+        const retult =  await productsBuyCollections.updateOne(
+          { _id: new ObjectId(id) },
+          {
+            $set: {
+              moneyGiven: updateMoneyGiven,
+              payableMoney: updatePayableMoney,
+              date: date,
+            },
+          }
+        );
+        // Send a success response
+        res.status(200).send(retult)
+      } catch (error) {
+        res.status(200).json({ message: 'Payment updated failed'});
+      }
+    })
 
 
     // try {
-      //   const existingData = await productsBuyCollections.findOne({ _id: new ObjectId(id) });
+    //   const existingData = await productsBuyCollections.findOne({ _id: new ObjectId(id) });
 
-      //   if (!existingData) {
-      //     return res.status(404).json({ message: 'Product not found' });
-      //   }
+    //   if (!existingData) {
+    //     return res.status(404).json({ message: 'Product not found' });
+    //   }
 
-      //   const newMoneyGiven = parseFloat(existingData.moneyGiven) + parseFloat(body.payAmount);
+    //   const newMoneyGiven = parseFloat(existingData.moneyGiven) + parseFloat(body.payAmount);
 
-      //   const updatedData = await productsBuyCollections.findOneAndUpdate(
-      //     { _id: new ObjectId(id) },
-      //     { $set: { moneyGiven: newMoneyGiven, ...body }},
-      //     { new: true } 
-      //   );
+    //   const updatedData = await productsBuyCollections.findOneAndUpdate(
+    //     { _id: new ObjectId(id) },
+    //     { $set: { moneyGiven: newMoneyGiven, ...body }},
+    //     { new: true } 
+    //   );
 
-      //   res.status(200).json({ message: 'Money given updated successfully', updatedData });
+    //   res.status(200).json({ message: 'Money given updated successfully', updatedData });
 
-      // } catch (error) {
-      //   console.error('Error updating the pay amount:', error);
-      //   res.status(500).json({ message: 'Internal Server Error' });
-      // }
+    // } catch (error) {
+    //   console.error('Error updating the pay amount:', error);
+    //   res.status(500).json({ message: 'Internal Server Error' });
+    // }
 
 
     // Admin home page api's here........

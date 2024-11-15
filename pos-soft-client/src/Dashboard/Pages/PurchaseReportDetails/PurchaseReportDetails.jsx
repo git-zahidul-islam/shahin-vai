@@ -80,7 +80,7 @@ const PurchaseReportDetails = () => {
     <section className="p-10">
       <div className="mb-6 bg-gray-100 p-4 rounded-lg shadow space-y-3">
         <div className="flex justify-between items-center">
-          <h2 className="text-xl mb-2"><span className="uppercase font-extrabold">{products?.companyName}</span> কোম্পানির দেনা পাওনার হিসাব</h2>
+          <h2 className="text-xl mb-2"><span className="uppercase font-extrabold underline text-[#e94374f5]">{products?.companyName}</span> কোম্পানির দেনা পাওনার হিসাব</h2>
           <button
             disabled={products?.payableMoney === products?.moneyGiven}
             onClick={handleUpdate}
