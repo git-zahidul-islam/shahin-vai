@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 
 const ProductsBuyReport = (reface) => {
   const [data, setData] = useState([]);
-  console.log(data);
 
   useEffect(() => {
     // Fetch purchase report from the server

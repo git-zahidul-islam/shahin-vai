@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import PurchaseReportTable from "./PurchaseReportTable";
 
 const PurchaseReportDetails = () => {
   const { id } = useParams();
@@ -9,6 +10,7 @@ const PurchaseReportDetails = () => {
   const [payAmount, SetPayAmount] = useState({ payable: "" });
   const [selectedDate, setSelectedDate] = useState("");
   const [refetch, setRefetch] = useState(false);
+  const [tableShow,setTableShow] = useState()
 
   const due = products?.payableMoney - products?.moneyGiven;
 
@@ -18,10 +20,15 @@ const PurchaseReportDetails = () => {
         `http://localhost:5000/single-product-report/${id}`
       );
       setProducts(res.data);
+      setTableShow(res.data?.serilalPay)
     };
 
     fetchData();
   }, [id, refetch]);
+
+
+  console.log(products);
+
 
   const handleUpdate = async () => {
     if (payAmount <= 0) {
@@ -43,9 +50,9 @@ const PurchaseReportDetails = () => {
     }
 
     const data = {
-      products,
+      payableMoney: products?.payableMoney,
       payAmount,
-      selectedDate,
+      date: selectedDate,
     }
 
     try {
@@ -73,7 +80,7 @@ const PurchaseReportDetails = () => {
     <section className="p-10">
       <div className="mb-6 bg-gray-100 p-4 rounded-lg shadow space-y-3">
         <div className="flex justify-between items-center">
-          <h2 className="text-xl mb-2">কোম্পানির দেনা পাওনার হিসাব</h2>
+          <h2 className="text-xl mb-2"><span className="uppercase font-extrabold">{products?.companyName}</span> কোম্পানির দেনা পাওনার হিসাব</h2>
           <button
             disabled={products?.payableMoney === products?.moneyGiven}
             onClick={handleUpdate}
@@ -108,6 +115,7 @@ const PurchaseReportDetails = () => {
                 type="text"
                 name="price"
                 id="price"
+                placeholder="zoma"
                 value={payAmount.payable}
                 onChange={(e) => SetPayAmount(e.target.value)}
                 className=" border-2 w-1/2"
@@ -125,6 +133,9 @@ const PurchaseReportDetails = () => {
           </div>
         </div>
       </div>
+
+      {/* table */}
+      <PurchaseReportTable tableShow={tableShow}></PurchaseReportTable>
     </section>
   );
 };

@@ -227,7 +227,7 @@ async function run() {
       }
     });
 
-  //  sales data api here
+    //  sales data api here
     // app.post('/sales', async (req, res) => {
     //   try {
     //     const { customerName, mobile, products, due } = req.body;
@@ -274,7 +274,7 @@ async function run() {
     //   const {
     //     subtotal, discount, vat, transport, totalAmount, cashPaid, totaldue: due, products, customerId
     //   } = salseData;
-  
+
     //   const updateData = {
     //     subtotal,
     //     discount,
@@ -286,32 +286,32 @@ async function run() {
     //     products,
     //     customerId
     //   };
-    
+
     //     const userUpdate = await customerCollections.findOneAndUpdate(
     //       { _id: new ObjectId(customerId) },
     //       { $set: { totalDue: due } },
     //       { returnOriginal: false }
     //     );
-    
+
     //     if (!userUpdate.value) {
     //       return res.status(404).send({ message: "Customer not found" });
     //     }
-    
+
     //     console.log("User due update", userUpdate);
-    
+
     //     // Insert the sales data into salesCollections
     //     const saleProducts = await salesCollections.insertOne(updateData);
     //     res.send({ message: "Products updated successfully", saleProducts });
-     
+
     // });
 
     // this is right - zahid::: -7:10 pm
     app.post('/changeable', async (req, res) => {
       const salesData = req.body;
       const {
-        subtotal, discount, vat, transport, totalAmount, cashPaid, totaldue: due, products, customerId,...customerData
+        subtotal, discount, vat, transport, totalAmount, cashPaid, totaldue: due, products, customerId, ...customerData
       } = salesData;
-    
+
       const updateData = {
         subtotal,
         discount,
@@ -334,18 +334,18 @@ async function run() {
         );
 
         console.log("User due updated:", userUpdate.value);
-    
+
         // Insert the sales data into salesCollections
         const saleProducts = await salesCollections.insertOne(updateData);
         res.status(200).send(saleProducts);
-        
+
       } catch (error) {
         console.error("Error in processing request:", error);
         res.status(500).json({ message: "Failed to process request", error });
       }
     });
-    
-    
+
+
 
 
 
@@ -361,9 +361,9 @@ async function run() {
 
     // customer details ::: zahid - 
     app.get("/customers-info/:id", async (req, res) => {
-      const {id} = req.params;
+      const { id } = req.params;
       try {
-        const products = await salesCollections.findOne({_id: new ObjectId(id)})
+        const products = await salesCollections.findOne({ _id: new ObjectId(id) })
         res.status(200).send(products);
       } catch (error) {
         res.status(500).json({ error: "Failed to fetch products info" });
@@ -372,43 +372,43 @@ async function run() {
 
     // pay ammount
     app.put("/customer-pay/:id", async (req, res) => {
-        const { id } = req.params;
-        const { payammount } = req.body; // Destructure payammount directly
-    
-        try {
-            const customer = await salesCollections.findOne({ _id: new ObjectId(id) });
-    
-            // Check if the customer exists
-            if (!customer) {
-                return res.status(404).json({ message: "Customer not found" });
-            }
-    
-            // Calculate the new totalDue (use `customer.due`)
-            const updatedTotalDue = customer.due - Number(payammount);
-    
-            // Ensure totalDue doesn't go negative
-            const newTotalDue = updatedTotalDue < 0 ? 0 : updatedTotalDue;
-    
-            const filter = { _id: new ObjectId(id) };
-            const updatedUser = {
-                $set: { due: newTotalDue }
-            };
-    
-            // Update the totalDue in the database
-            const result = await salesCollections.updateOne(filter, updatedUser);
-    
-            res.status(200).json({ message: "Updated successfully", result });
-        } catch (error) {
-            res.status(500).json({ message: "Error updating payment", error });
+      const { id } = req.params;
+      const { payammount } = req.body; // Destructure payammount directly
+
+      try {
+        const customer = await salesCollections.findOne({ _id: new ObjectId(id) });
+
+        // Check if the customer exists
+        if (!customer) {
+          return res.status(404).json({ message: "Customer not found" });
         }
+
+        // Calculate the new totalDue (use `customer.due`)
+        const updatedTotalDue = customer.due - Number(payammount);
+
+        // Ensure totalDue doesn't go negative
+        const newTotalDue = updatedTotalDue < 0 ? 0 : updatedTotalDue;
+
+        const filter = { _id: new ObjectId(id) };
+        const updatedUser = {
+          $set: { due: newTotalDue }
+        };
+
+        // Update the totalDue in the database
+        const result = await salesCollections.updateOne(filter, updatedUser);
+
+        res.status(200).json({ message: "Updated successfully", result });
+      } catch (error) {
+        res.status(500).json({ message: "Error updating payment", error });
+      }
     });
-    
+
 
     // Fetch all sales info for table data show.
     app.get("/all-sales-data/:id", async (req, res) => {
       try {
         const query = req.params
-        console.log("inviice",query);
+        console.log("inviice", query);
         const products = await salesCollections.findOne({ _id: new ObjectId(query) });
         res.status(200).json(products);
       } catch (error) {
@@ -458,7 +458,7 @@ async function run() {
       }
     });
 
-    // single data 
+    // single data purchase details page
     app.get('/single-product-report/:id', async (req, res) => {
       try {
         const { id } = req.params;
@@ -487,37 +487,82 @@ async function run() {
     });
 
     // update pay amount
-    app.put('/update-pay-amount/:id', async (req, res) => {
-      const { id } = req.params;
-      const body = req.body; 
-    
-    
-      try {
+    const { ObjectId } = require('mongodb');
+
+app.put('/update-pay-amount/:id', async (req, res) => {
+    const { id } = req.params;
+    const { payAmount, date } = req.body;
+
+    try {
+        // Find the existing record
         const existingData = await productsBuyCollections.findOne({ _id: new ObjectId(id) });
-        
         if (!existingData) {
-          return res.status(404).json({ message: 'Product not found' });
+            return res.status(404).json({ message: 'Product not found' });
         }
 
-        const newMoneyGiven = parseFloat(existingData.moneyGiven) + parseFloat(body.payAmount);
-    
-        const updatedData = await productsBuyCollections.findOneAndUpdate(
-          { _id: new ObjectId(id) },
-          { $set: { moneyGiven: newMoneyGiven, ...body }},
-          { new: true } 
+        // Calculate the new moneyGiven value
+        const newMoneyGiven = parseFloat(existingData.moneyGiven) + parseFloat(payAmount);
+
+        // Create a new payment record
+        const newPaymentRecord = {
+            amount: parseFloat(payAmount),
+            date
+        };
+
+        // Append the new payment record to serilalPay array (create the array if it doesn't exist)
+        const updatedSerilalPay = existingData.serilalPay ? [...existingData.serilalPay, newPaymentRecord] : [newPaymentRecord];
+
+        // Update the record in the database
+        await productsBuyCollections.updateOne(
+            { _id: new ObjectId(id) },
+            {
+                $set: { 
+                    moneyGiven: newMoneyGiven,
+                    serilalPay: updatedSerilalPay,
+                },
+            }
         );
-    
-        res.status(200).json({ message: 'Money given updated successfully', updatedData });
-    
-      } catch (error) {
-        console.error('Error updating the pay amount:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
-      }
-    });
+
+        // Send a success response
+        res.status(200).json({
+            message: 'Payment updated successfully',
+            updatedData: {
+                moneyGiven: newMoneyGiven,
+                serilalPay: updatedSerilalPay,
+            },
+        });
+    } catch (error) {
+        console.error('Error updating payment:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 
-     // Admin home page api's here........
-     app.get('/api/dashboard-counts', async (req, res) => {
+    // try {
+      //   const existingData = await productsBuyCollections.findOne({ _id: new ObjectId(id) });
+
+      //   if (!existingData) {
+      //     return res.status(404).json({ message: 'Product not found' });
+      //   }
+
+      //   const newMoneyGiven = parseFloat(existingData.moneyGiven) + parseFloat(body.payAmount);
+
+      //   const updatedData = await productsBuyCollections.findOneAndUpdate(
+      //     { _id: new ObjectId(id) },
+      //     { $set: { moneyGiven: newMoneyGiven, ...body }},
+      //     { new: true } 
+      //   );
+
+      //   res.status(200).json({ message: 'Money given updated successfully', updatedData });
+
+      // } catch (error) {
+      //   console.error('Error updating the pay amount:', error);
+      //   res.status(500).json({ message: 'Internal Server Error' });
+      // }
+
+
+    // Admin home page api's here........
+    app.get('/api/dashboard-counts', async (req, res) => {
       try {
         const userCount = await userCollections.estimatedDocumentCount();
         const productCount = await productCollections.estimatedDocumentCount();
@@ -538,18 +583,18 @@ async function run() {
     });
 
 
-    
-// All sales report show here........
-app.get('/sales-report', async (req, res) => {
-  try {
-    const salesData = await salesCollections.find({}).toArray();
-    res.json(salesData);
-  } catch (error) {
-    console.error("Error fetching sales data:", error);
-    res.status(500).send("Error fetching sales data");
-  }
-});
-    
+
+    // All sales report show here........
+    app.get('/sales-report', async (req, res) => {
+      try {
+        const salesData = await salesCollections.find({}).toArray();
+        res.json(salesData);
+      } catch (error) {
+        console.error("Error fetching sales data:", error);
+        res.status(500).send("Error fetching sales data");
+      }
+    });
+
 
   } finally {
 
