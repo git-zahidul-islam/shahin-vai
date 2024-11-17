@@ -346,7 +346,19 @@ async function run() {
     });
 
 
-
+    // customer paymented data delete
+    app.delete('/paid-data-delete/:id', async (req, res) => {
+      const { id } = req.params;
+      try {
+          const result = await salesCollections.deleteOne({ _id: new ObjectId(id) });
+          if (result.deletedCount === 0) {
+              return res.status(404).json({ message: 'Item not found' });
+          }
+          res.json({ message: 'Item deleted successfully' });
+      } catch (error) {
+          res.status(500).json({ message: 'Error deleting item', error });
+      }
+  });
 
 
     // Fetch customers info for table data show. ::: zahid

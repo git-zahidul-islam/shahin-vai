@@ -7,7 +7,7 @@ const CustomerInfoDetails = () => {
     const {id} = useParams()
     const productsMap = details?.products || [];
 
-    console.log(productsMap);
+    console.log(details);
 
     useEffect(()=>{
         const fetchData = async () => {
@@ -54,11 +54,10 @@ const CustomerInfoDetails = () => {
             {/* Transaction Information */}
             <div className="mb-6">
                 <h3 className="text-lg font-semibold mb-3">Transaction Information</h3>
-                <p><strong>Subtotal:</strong> {details.subtotal}</p>
-                <p><strong>VAT:</strong> {details.vat}</p>
-                <p><strong>Transport:</strong> {details.transport}</p>
-                <p><strong>Discount:</strong> {details.discount}</p>
+                <p className="font-bold text-gray-900/80">Transaction Date: {details.customerData?.date}</p>
                 <p><strong>Total Amount:</strong> {details.totalAmount}</p>
+                {/* <p><strong>Subtotal:</strong> {details.subtotal}</p> */}
+                <p><strong>Discount:</strong> {details.discount}</p>
                 <p><strong>Cash Paid:</strong> {details.cashPaid}</p>
                 <p><strong>Due:</strong> {details.due}</p>
             </div>

@@ -23,6 +23,8 @@ const CustomerInfo = () => {
 
     const [customers, setCustomers] = useState([]);
 
+    console.log("cussss",customers);
+
     // Fetch customers from MongoDB
     useEffect(() => {
         const fetchCustomers = async () => {
