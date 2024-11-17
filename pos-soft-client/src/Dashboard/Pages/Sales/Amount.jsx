@@ -12,7 +12,7 @@ const Amount = () => {
         subtotal: 0,
         discount: 0,
         totalAmount: 0,
-        cashPaid: '0',
+        cashPaid: 0,
         due: 0,
         totalDue: parseInt(selectedCustomer?.totalDue) || 0,
     });

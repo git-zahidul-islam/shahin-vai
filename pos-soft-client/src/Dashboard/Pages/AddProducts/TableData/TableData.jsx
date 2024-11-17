@@ -69,7 +69,7 @@ export default function TableData() {
                 <td className="border px-2 py-1">{product.productQty}</td>
                 <td className="border px-2 py-1">{product.buyRate}</td>
                 <td className="border px-2 py-1">
-                  <div className="flex justify-center gap-2">
+                  <div className="flex justify-center gap-5">
                     <Link to={`/update-product/${product._id}`}>
                       <MdEdit className="text-green-500 hover:text-green-700 cursor-pointer" />
                     </Link>
