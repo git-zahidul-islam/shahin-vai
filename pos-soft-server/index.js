@@ -31,6 +31,7 @@ async function run() {
     const productCollections = client.db('pos-soft').collection('products');
     const customerCollections = client.db('pos-soft').collection('customers');
     const salesCollections = client.db('pos-soft').collection('sales');
+    const nagadSalesCollections = client.db('pos-soft').collection('nagad-sales');
     const productsBuyCollections = client.db('pos-soft').collection('productsBuy');
 
     // get users from db
@@ -643,6 +644,45 @@ async function run() {
       }
     });
 
+
+  // nagad slase re
+  app.post('/nagad-sale', async(req,res) =>{
+    const body = req.body;
+    try {
+      const nagadSale = await nagadSalesCollections.insertOne(body);
+      res.send(nagadSale);
+    } catch (error) {
+      res.send({message: 'there have problems'})
+    }
+  })
+
+  // nagad sale
+  app.get("/nagad-sale-report", async (req, res) => {
+    try {
+    
+      // Fetch documents from the collection
+      const documents = await nagadSalesCollections.find().toArray();
+  
+      // Format the data for the frontend
+      const formattedData = documents.map((item, index) => ({
+        sl: index + 1,
+        date: item.payments.date,
+        customerName: item.customerData.customerName,
+        products: item.products
+          .map((product) => `${product.product} (x${product.qty})`)
+          .join(", "),
+        address: item.customerData.address,
+        mobile: item.customerData.mobile,
+        due: item.payments.due,
+        totalPrice: item.payments.totalAmount,
+      }));
+  
+      res.json(formattedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      res.status(500).json({ message: "Failed to fetch data" });
+    }
+  });
 
   } finally {
 

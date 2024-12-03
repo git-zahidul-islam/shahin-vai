@@ -17,6 +17,7 @@ const DashboardLayout = () => {
                     <li><Link to='/dashboard'>Home</Link></li>
                     <li><Link to='sales'>বিক্রয় এন্ট্রি</Link></li>
                     <li><Link to='cash-sales'>Nagad Sell</Link></li>
+                    <li><Link to='cash-sales-report'>Nagad Sell Report</Link></li>
                     <li><Link to='add-product'>পণ্য যোগ করুন</Link></li>
                     <li><Link to="products-list">সকল পণ্য</Link></li>
                     <li><Link to='all-sales-report'>সকল বিক্রয় রিপোর্ট</Link></li>

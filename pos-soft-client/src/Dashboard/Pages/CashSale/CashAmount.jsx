@@ -1,37 +1,54 @@
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useAuth } from "../../../provider/useAuth";
+import axios from "axios";
 
 const CashAmount = () => {
-    const { register, handleSubmit, watch, setValue, reset } = useForm();
-    const { cashSubTotal , cashCart , formData,resetCart } = useAuth();
-    const cart = cashCart || []
-    console.log("checcck",cashSubTotal);
+    const {
+        register,
+        handleSubmit,
+        watch,
+        setValue,
+        reset,
+        formState: { errors },
+    } = useForm();
+    const { cashSubTotal, cashCart, formData, resetCart } = useAuth();
+    const cart = cashCart || [];
 
-    // Set cashSubTotal as the default value for subtotal
+    // Initialize subtotal and watch inputs
     useEffect(() => {
         setValue("subtotal", cashSubTotal || 0); // Set default value for subtotal
     }, [cashSubTotal, setValue]);
 
-    // Watching inputs
-    const subtotal = watch("subtotal", 0); // Default value 0
-    const discount = watch("discount", 0); // Default value 0
-    const cashPaid = watch("cashPaid", 0); // Default value 0
+    const subtotal = watch("subtotal", 0); // Default value
+    const discount = watch("discount", 0); // Default value
+    const cashPaid = watch("cashPaid", 0); // Default value
 
-    // Calculate totalAmount and previousDue
+    // Real-time validation for cashPaid
+    const totalAmount = parseFloat(subtotal || 0) * (1 - parseFloat(discount || 0) / 100);
+    const cashPaidError =
+        parseFloat(cashPaid) > totalAmount
+            ? "ক্যাশ জমা মোট টাকা থেকে বেশি হতে পারবে না!"
+            : parseFloat(cashPaid) < 0
+            ? "ক্যাশ জমা ঋণাত্মক হতে পারবে না!"
+            : null;
+
     useEffect(() => {
         const discountedAmount = parseFloat(subtotal || 0) * (1 - parseFloat(discount || 0) / 100);
-        setValue("totalAmount", discountedAmount.toFixed(2)); // Update totalAmount
-
+        setValue("totalAmount", discountedAmount.toFixed(2));
         const remainingDue = discountedAmount - parseFloat(cashPaid || 0);
-        setValue("due", remainingDue.toFixed(2)); // Update previousDue
+        setValue("due", remainingDue.toFixed(2));
     }, [subtotal, discount, cashPaid, setValue]);
 
-    // Handle form submission
-    const onSubmit = (data) => {
-        console.log("Form Data:", {payments: data, products: cart, customerData: formData});
-        reset()
-        resetCart()
+    const onSubmit = async (data) => {
+        if (!cashPaidError) {
+            // console.log("Form Data:", { payments: data, products: cart, customerData: formData });
+            const res = await axios.post('http://localhost:5000/nagad-sale', { payments: data, products: cart, customerData: formData })
+            // if(res.data.insertedId)
+            console.log(res.data);
+            reset();
+            resetCart();
+        }
     };
 
     return (
@@ -49,8 +66,11 @@ const CashAmount = () => {
                                 id="date"
                                 name="date"
                                 className="border p-1 rounded w-full"
-                                {...register("date", { required: true })}
+                                {...register("date", { required: "এই ফিল্ডটি পূরণ করা আবশ্যক" })}
                             />
+                            {errors.date && (
+                                <p className="text-red-500 text-xs mt-1">{errors.date.message}</p>
+                            )}
                         </div>
 
                         {/* Subtotal */}
@@ -103,10 +123,15 @@ const CashAmount = () => {
                                 type="number"
                                 id="cashPaid"
                                 name="cashPaid"
-                                className="border p-1 rounded w-full"
+                                className={`border p-1 rounded w-full ${
+                                    cashPaidError ? "border-red-500" : ""
+                                }`}
                                 placeholder="ক্যাশ জমা"
-                                {...register("cashPaid", { required: true })}
+                                {...register("cashPaid", { required: "এই ফিল্ডটি পূরণ করা আবশ্যক" })}
                             />
+                            {cashPaidError && (
+                                <p className="text-red-500 text-sm mt-1">{cashPaidError}</p>
+                            )}
                         </div>
 
                         {/* Previous Due */}
