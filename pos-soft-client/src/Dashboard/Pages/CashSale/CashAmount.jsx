@@ -3,8 +3,8 @@ import { useEffect } from "react";
 import { useAuth } from "../../../provider/useAuth";
 
 const CashAmount = () => {
-    const { register, handleSubmit, watch, setValue } = useForm();
-    const { cashSubTotal , cashCart , formData } = useAuth();
+    const { register, handleSubmit, watch, setValue, reset } = useForm();
+    const { cashSubTotal , cashCart , formData,resetCart } = useAuth();
     const cart = cashCart || []
     console.log("checcck",cashSubTotal);
 
@@ -24,12 +24,14 @@ const CashAmount = () => {
         setValue("totalAmount", discountedAmount.toFixed(2)); // Update totalAmount
 
         const remainingDue = discountedAmount - parseFloat(cashPaid || 0);
-        setValue("previousDue", remainingDue.toFixed(2)); // Update previousDue
+        setValue("due", remainingDue.toFixed(2)); // Update previousDue
     }, [subtotal, discount, cashPaid, setValue]);
 
     // Handle form submission
     const onSubmit = (data) => {
-        console.log("Form Data:", {payment: data, products: cart, customerData: formData});
+        console.log("Form Data:", {payments: data, products: cart, customerData: formData});
+        reset()
+        resetCart()
     };
 
     return (
@@ -59,7 +61,7 @@ const CashAmount = () => {
                                 type="number"
                                 id="subtotal"
                                 name="subtotal"
-                                className="border p-1 rounded w-[80%] outline-none bg-gray-500/30"
+                                className="border p-1 rounded w-[80%] outline-none"
                                 {...register("subtotal")}
                             />
                         </div>
@@ -88,7 +90,7 @@ const CashAmount = () => {
                                 id="totalAmount"
                                 name="totalAmount"
                                 placeholder="0"
-                                className="border p-1 rounded w-full outline-none bg-gray-500/30"
+                                className="border p-1 rounded w-full outline-none"
                                 readOnly
                                 {...register("totalAmount")}
                             />
@@ -109,14 +111,14 @@ const CashAmount = () => {
 
                         {/* Previous Due */}
                         <div className="mb-1 w-[60%]">
-                            <label htmlFor="previousDue" className="mr-2">বাকী</label>
+                            <label htmlFor="due" className="mr-2">বাকী</label>
                             <input
                                 type="number"
-                                id="previousDue"
-                                name="previousDue"
-                                className="border p-1 rounded w-full outline-none bg-black/50"
+                                id="due"
+                                name="due"
+                                className="border p-1 rounded w-full outline-none bg-black/80"
                                 readOnly
-                                {...register("previousDue")}
+                                {...register("due")}
                             />
                         </div>
 

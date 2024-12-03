@@ -110,6 +110,10 @@ const AuthProvider = ({ children }) => {
         address: "",
         mobile: "",
     });
+    const resetCart = () => {
+        setCashCart([]);
+       
+    };
 
    
     
@@ -128,6 +132,7 @@ const AuthProvider = ({ children }) => {
         cashCart,
         cashSubTotal,
         formData,
+        resetCart,
         setFormData,
         setCashSubTotal,
         setCashCart,
