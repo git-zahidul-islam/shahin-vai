@@ -103,6 +103,16 @@ const AuthProvider = ({ children }) => {
     const [productsDetails, setProductsDetails] = useState([])
     const [subtotalAmount, setSubtotalAmount] = useState(null)
     const [invoiceId, setInvoiceId] = useState('')
+    const [cashCart, setCashCart] = useState([]);
+    const [cashSubTotal, setCashSubTotal] = useState(0)
+    const [formData, setFormData] = useState({
+        customerName: "",
+        address: "",
+        mobile: "",
+    });
+
+   
+    
 
 
     // console.log(selectedCustomer);
@@ -115,6 +125,12 @@ const AuthProvider = ({ children }) => {
         selectedCustomer,
         productsDetails,
         subtotalAmount,
+        cashCart,
+        cashSubTotal,
+        formData,
+        setFormData,
+        setCashSubTotal,
+        setCashCart,
         setSubtotalAmount,
         setProductsDetails,
         setSelectedCustomer,
