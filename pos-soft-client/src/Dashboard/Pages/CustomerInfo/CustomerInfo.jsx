@@ -126,9 +126,17 @@ export default function CustomerTable() {
 
     return (
         <div className="container mx-auto p-4">
-            <h2 className="text-2xl font-bold mb-4 py-3 text-center bg-[#dc4b76f5]">Customer List</h2>
-
-            {/* Search input */}
+            <h2 className="text-2xl font-bold mb-4 py-3 text-center bg-[#dc4b76f5]">Baki customer Sale report & Pay</h2>
+            
+            {
+                customers && customers.length == 0 
+                ?
+                <div className='h-[50vh]'>
+                    <p className='text-4xl'>no customer sale</p>
+                </div>
+                :
+                
+                <section>
             <input
                 type="text"
                 placeholder="Search by name"
@@ -162,7 +170,7 @@ export default function CustomerTable() {
                                         <td className="py-3 px-6">{customer.customerData?.label}</td>
                                         <td className="py-3 px-6">{customer.customerData?.mobile}</td>
                                         <td className="py-3 px-6">{customer.customerData?.address}</td>
-                                        <td className="py-3 px-6">{customer.customerData?.date ? customer.customerData?.date : "No Date"}</td>
+                                        <td className="py-3 px-6">{customer.date ? customer.date : "No Date"}</td>
                                         <td className="py-3 px-6">{customer.due}</td>
                                         <td className="py-3">
                                             <input className='p-2 w-[120px]' type="date" name="paidDate" id="paidDate" onChange={(e) => setpaidDate(e.target.value)} />
@@ -184,6 +192,8 @@ export default function CustomerTable() {
                     </tbody>
                 </table>
             </div>
+            </section>
+            }
         </div>
     );
 }

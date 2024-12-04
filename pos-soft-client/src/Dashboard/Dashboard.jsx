@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
+import { FaMoneyBill } from "react-icons/fa";
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
 
 // Register Chart.js components
@@ -92,6 +93,39 @@ const Dashboard = () => {
                 <div className="bg-red-500/70 text-white p-6 h-full text-center rounded-[100%] shadow-md">
                     <h2 className="md:text-lg text-sm font-bold">মোট কোম্পানি </h2>
                     <p>{counts.productsBuyCount}</p>
+                </div>
+            </div>
+
+            {/* slae count stats */}
+            <div className='p-4 bg-slate-400/70 space-y-3 mt-8'>
+                <h1 className='text-white md:text-4xl font-bold pb-3'>Total Sales Report</h1>
+                <div className='flex gap-5 items-center justify-start'>
+                    <input className='block px-2 py-1 bg-gray-600/50' type="date" name="start" id="start" />
+                    <input className='block px-2 py-1 bg-gray-600/50' type="date" name="start" id="start" />
+                    <button className='block px-2 py-1 bg-green-300'>See data</button>
+                </div>
+                <div className='grid md:grid-cols-3 grid-cols-1 gap-5'>
+                    <div className='rounded-md bg-gray-200/50 border border-gray-200/70 p-3 flex items-center justify-between'>
+                        <div className='space-y-2'>
+                        <h4 className='text-xl font-medium'>Total Sale</h4>
+                        <p>10000</p>
+                        </div>
+                        <FaMoneyBill size={50}></FaMoneyBill>
+                    </div>
+                    <div className='rounded-md bg-gray-200/70 border border-gray-200/90 p-3 flex items-center justify-between'>
+                        <div className='space-y-2'> 
+                        <h4 className='text-xl font-medium'>Baki Sale</h4>
+                        <p>5000</p>
+                        </div>
+                        <FaMoneyBill size={50}></FaMoneyBill>
+                    </div>
+                    <div className='rounded-md bg-gray-200/85 border border-gray-200 p-3 flex items-center justify-between'>
+                        <div className='space-y-2'>
+                        <h4 className='text-xl font-medium'>Nagad Sale</h4>
+                        <p>5000</p>
+                        </div>
+                        <FaMoneyBill size={50}></FaMoneyBill>
+                    </div>
                 </div>
             </div>
 

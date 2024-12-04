@@ -310,13 +310,14 @@ async function run() {
     app.post('/changeable', async (req, res) => {
       const salesData = req.body;
       const {
-        subtotal, discount, vat, transport, totalAmount, cashPaid, totaldue: due, products, customerId, ...customerData
+        subtotal, discount, date, vat, transport, totalAmount, cashPaid, totaldue: due, products, customerId, ...customerData
       } = salesData;
 
       const updateData = {
         subtotal,
         discount,
         vat,
+        date,
         transport,
         totalAmount,
         cashPaid,
