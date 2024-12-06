@@ -352,15 +352,15 @@ async function run() {
     app.delete('/paid-data-delete/:id', async (req, res) => {
       const { id } = req.params;
       try {
-          const result = await salesCollections.deleteOne({ _id: new ObjectId(id) });
-          if (result.deletedCount === 0) {
-              return res.status(404).json({ message: 'Item not found' });
-          }
-          res.json({ message: 'Item deleted successfully' });
+        const result = await salesCollections.deleteOne({ _id: new ObjectId(id) });
+        if (result.deletedCount === 0) {
+          return res.status(404).json({ message: 'Item not found' });
+        }
+        res.json({ message: 'Item deleted successfully' });
       } catch (error) {
-          res.status(500).json({ message: 'Error deleting item', error });
+        res.status(500).json({ message: 'Error deleting item', error });
       }
-  });
+    });
 
 
     // Fetch customers info for table data show. ::: zahid
@@ -389,38 +389,38 @@ async function run() {
       const { id } = req.params;
       const { data } = req.body;
       const { payammount, paidDate, previousDue } = data;
-    
+
       try {
         const customer = await salesCollections.findOne({ _id: new ObjectId(id) });
-    
+
         // Check if the customer exists
         if (!customer) {
           return res.status(404).json({ message: "Customer not found" });
         }
-    
+
         // Calculate the new totalDue (use `customer.due`)
         const updatedTotalDue = customer.due - Number(payammount);
-    
+
         // Ensure totalDue doesn't go negative
         const newTotalDue = updatedTotalDue < 0 ? 0 : updatedTotalDue;
-    
-        const paymentRecord = { payammount, paidDate , previousDue };
-    
+
+        const paymentRecord = { payammount, paidDate, previousDue };
+
         const filter = { _id: new ObjectId(id) };
         const updatedUser = {
           $set: { due: newTotalDue },
           $push: { customerPayments: paymentRecord }, // Add the payment to the payments array
         };
-    
+
         // Update the totalDue and add payment record in the database
         const result = await salesCollections.updateOne(filter, updatedUser);
-    
+
         res.status(200).json({ message: "Updated successfully", result });
       } catch (error) {
         res.status(500).json({ message: "Error updating payment", error });
       }
     });
-    
+
 
 
     // Fetch all sales info for table data show.
@@ -570,7 +570,7 @@ async function run() {
         const updateMoneyGiven = parseInt(existingData.moneyGiven) + parseInt(moneyGiven);
         const updatePayableMoney = parseInt(existingData.payableMoney) + parseInt(payableMoney);
 
-        const retult =  await productsBuyCollections.updateOne(
+        const retult = await productsBuyCollections.updateOne(
           { _id: new ObjectId(id) },
           {
             $set: {
@@ -583,7 +583,7 @@ async function run() {
         // Send a success response
         res.status(200).send(retult)
       } catch (error) {
-        res.status(200).json({ message: 'Payment updated failed'});
+        res.status(200).json({ message: 'Payment updated failed' });
       }
     })
 
@@ -646,44 +646,83 @@ async function run() {
     });
 
 
-  // nagad slase re
-  app.post('/nagad-sale', async(req,res) =>{
-    const body = req.body;
-    try {
-      const nagadSale = await nagadSalesCollections.insertOne(body);
-      res.send(nagadSale);
-    } catch (error) {
-      res.send({message: 'there have problems'})
-    }
-  })
+    // nagad slase re
+    app.post('/nagad-sale', async (req, res) => {
+      const body = req.body;
+      try {
+        const nagadSale = await nagadSalesCollections.insertOne(body);
+        res.send(nagadSale);
+      } catch (error) {
+        res.send({ message: 'there have problems' })
+      }
+    })
 
-  // nagad sale
-  app.get("/nagad-sale-report", async (req, res) => {
-    try {
-    
-      // Fetch documents from the collection
-      const documents = await nagadSalesCollections.find().toArray();
+    // nagad sale
+    app.get("/nagad-sale-report", async (req, res) => {
+      try {
+
+        // Fetch documents from the collection
+        const documents = await nagadSalesCollections.find().toArray();
+
+        // Format the data for the frontend
+        const formattedData = documents.map((item, index) => ({
+          sl: index + 1,
+          date: item.payments.date,
+          customerName: item.customerData.customerName,
+          products: item.products
+            .map((product) => `${product.product} (x${product.qty})`)
+            .join(", "),
+          address: item.customerData.address,
+          mobile: item.customerData.mobile,
+          due: item.payments.due,
+          totalPrice: item.payments.totalAmount,
+        }));
+
+        res.json(formattedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        res.status(500).json({ message: "Failed to fetch data" });
+      }
+    });
+
+
+    // stats page
+    app.get('/calculate-totals', async (req, res) => {
+      try {
+          // Fetch all data from the collection
+        const data1 = await salesCollections.find({}).toArray();
+        const data2 = await nagadSalesCollections.find({},{ projection: { payments: 1, _id: 0 } }).toArray();
+
+        const data2Payment = data2.map((item) =>item.payments)
   
-      // Format the data for the frontend
-      const formattedData = documents.map((item, index) => ({
-        sl: index + 1,
-        date: item.payments.date,
-        customerName: item.customerData.customerName,
-        products: item.products
-          .map((product) => `${product.product} (x${product.qty})`)
-          .join(", "),
-        address: item.customerData.address,
-        mobile: item.customerData.mobile,
-        due: item.payments.due,
-        totalPrice: item.payments.totalAmount,
-      }));
+        // Combine data from both collections
+        const combinedData = [...data1, ...data2Payment];
+
+        // Initialize totals
+        let totalSale = 0;
+        let nagad = 0;
+        let due = 0;
   
-      res.json(formattedData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      res.status(500).json({ message: "Failed to fetch data" });
-    }
+          // Aggregate the totals
+          combinedData.forEach(entry => {
+              totalSale += parseInt(entry.totalAmount) || 0;
+              nagad += parseInt(entry.cashPaid) || 0;
+              due += (parseInt(entry.totalAmount) || 0) - (parseInt(entry.cashPaid) || 0);
+          });
+  
+          // Send response
+          res.json({
+              totalSale,
+              nagad,
+              due,
+          });
+      } catch (error) {
+          console.error('Error fetching data:', error);
+          res.status(500).json({ error: 'Internal Server Error' });
+      }
   });
+
+    
 
   } finally {
 
