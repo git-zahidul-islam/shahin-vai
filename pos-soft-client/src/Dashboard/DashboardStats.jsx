@@ -51,14 +51,14 @@ const DashboardStats = () => {
                 <div className='flex gap-5 items-center justify-start'>
                     <input
                         onChange={(e) => setStartDate(e.target.value)}
-                        className='block px-2 py-1 bg-white border border-[#dd527b] rounded-md'
+                        className='block px-2 py-1 bg-white/50 border border-[#dd527b] rounded-md'
                         type='date'
                         name='start'
                         id='start'
                     />
                     <input
                         onChange={(e) => setEndDate(e.target.value)}
-                        className='block px-2 py-1 bg-white border border-[#dd527b] rounded-md'
+                        className='block px-2 py-1 bg-white/50 border border-[#dd527b] rounded-md'
                         type='date'
                         name='end'
                         id='end'
