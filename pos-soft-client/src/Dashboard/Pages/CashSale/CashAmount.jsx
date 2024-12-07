@@ -35,15 +35,15 @@ const CashAmount = () => {
 
     useEffect(() => {
         const discountedAmount = parseFloat(subtotal || 0) * (1 - parseFloat(discount || 0) / 100);
-        setValue("totalAmount", discountedAmount.toFixed(2));
+        setValue("totalAmount", discountedAmount);
         const remainingDue = discountedAmount - parseFloat(cashPaid || 0);
-        setValue("due", remainingDue.toFixed(2));
+        setValue("due", remainingDue);
     }, [subtotal, discount, cashPaid, setValue]);
 
     const onSubmit = async (data) => {
         if (!cashPaidError) {
             // console.log("Form Data:", { payments: data, products: cart, customerData: formData });
-            const res = await axios.post('http://localhost:5000/nagad-sale', { payments: data, products: cart, customerData: formData })
+            const res = await axios.post('http://localhost:5000/nagad-sale', { ...data, products: cart, customerData: formData })
             // if(res.data.insertedId)
             console.log(res.data);
             reset();

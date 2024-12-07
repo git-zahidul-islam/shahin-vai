@@ -667,15 +667,15 @@ async function run() {
         // Format the data for the frontend
         const formattedData = documents.map((item, index) => ({
           sl: index + 1,
-          date: item.payments.date,
+          date: item.date,
           customerName: item.customerData.customerName,
           products: item.products
             .map((product) => `${product.product} (x${product.qty})`)
             .join(", "),
           address: item.customerData.address,
           mobile: item.customerData.mobile,
-          due: item.payments.due,
-          totalPrice: item.payments.totalAmount,
+          due: item.due,
+          totalPrice: item.totalAmount,
         }));
 
         res.json(formattedData);
@@ -687,42 +687,136 @@ async function run() {
 
 
     // stats page
+    //   app.get('/calculate-totals', async (req, res) => {
+    //     try {
+    //         // Fetch all data from the collection
+    //       const data1 = await salesCollections.find({}).toArray();
+    //       const data2 = await nagadSalesCollections.find({},{ projection: { payments: 1, _id: 0 } }).toArray();
+
+    //       const data2Payment = data2.map((item) =>item.payments)
+
+    //       // Combine data from both collections
+    //       const combinedData = [...data1, ...data2Payment];
+
+    //       // Initialize totals
+    //       let totalSale = 0;
+    //       let nagad = 0;
+    //       let due = 0;
+
+    //         // Aggregate the totals
+    //         combinedData.forEach(entry => {
+    //             totalSale += parseInt(entry.totalAmount) || 0;
+    //             nagad += parseInt(entry.cashPaid) || 0;
+    //             due += (parseInt(entry.totalAmount) || 0) - (parseInt(entry.cashPaid) || 0);
+    //         });
+
+    //         // Send response
+    //         res.json({
+    //             totalSale,
+    //             nagad,
+    //             due,
+    //         });
+    //     } catch (error) {
+    //         console.error('Error fetching data:', error);
+    //         res.status(500).json({ error: 'Internal Server Error' });
+    //     }
+    // });
+
+    // app.get('/calculate-totals', async (req, res) => {
+    // const { startDate, endDate } = req.query;
+    // let query = {};
+
+    // if (startDate && endDate) {
+    //     query = {
+    //         "date": {
+    //             $gte: startDate,
+    //             $lte: endDate,
+    //         },
+    //     };
+    //     console.log("the query is",query);
+    // }
+
+    //   try {
+    //     // Fetch data from both collections based on query
+    //     const data1 = await salesCollections.find(query).toArray();
+    //     const data2 = await nagadSalesCollections
+    //       .find(query, { projection: { payments: 1, _id: 0 } })
+    //       .toArray();
+
+    //       console.log(data2);
+        
+    //     const data2date = data2.map((item) => item.payments)
+        
+    //     // Combine and process data manually
+    //     const allPayments = [
+    //       ...data1,
+    //       ... data2date,
+    //     ];
+
+      
+
+    //     // Calculate totals
+    //     const totals = allPayments.reduce(
+    //       (acc, payment) => {
+    //         acc.totalSale += parseFloat(payment.totalAmount || 0);
+    //         acc.nagad += parseFloat(payment.cashPaid || 0);
+    //         acc.due += parseFloat(payment.due || 0);
+    //         return acc;
+    //       },
+    //       { totalSale: 0, nagad: 0, due: 0 }
+    //     );
+    //     res.json(totals);
+    //   } catch (error) {
+    //     console.error(error);
+    //     res.status(500).json({ error: 'Internal Server Error' });
+    //   }
+    // });
+
+
     app.get('/calculate-totals', async (req, res) => {
+      const { startDate, endDate } = req.query;
+      let query = {};
+  
+      if (startDate && endDate) {
+          query = {
+              date: {
+                  $gte: startDate,
+                  $lte: endDate,
+              },
+          };
+          console.log('The query is:', query);
+      }
+  
       try {
-          // Fetch all data from the collection
-        const data1 = await salesCollections.find({}).toArray();
-        const data2 = await nagadSalesCollections.find({},{ projection: { payments: 1, _id: 0 } }).toArray();
-
-        const data2Payment = data2.map((item) =>item.payments)
+          // Fetch data from both collections based on query
+          const data1 = await salesCollections.find(query).toArray();
+          const data2 = await nagadSalesCollections.find(query).toArray();
   
-        // Combine data from both collections
-        const combinedData = [...data1, ...data2Payment];
-
-        // Initialize totals
-        let totalSale = 0;
-        let nagad = 0;
-        let due = 0;
+          // Combine and process data
+          const allPayments = [...data1, ...data2];
   
-          // Aggregate the totals
-          combinedData.forEach(entry => {
-              totalSale += parseInt(entry.totalAmount) || 0;
-              nagad += parseInt(entry.cashPaid) || 0;
-              due += (parseInt(entry.totalAmount) || 0) - (parseInt(entry.cashPaid) || 0);
-          });
+          // Calculate totals
+          const totals = allPayments.reduce(
+              (acc, payment) => {
+                  acc.totalSale += parseFloat(payment.totalAmount || 0);
+                  acc.nagad += parseFloat(payment.cashPaid || 0);
+                  acc.due += parseFloat(payment.due || 0);
+                  return acc;
+              },
+              { totalSale: 0, nagad: 0, due: 0 }
+          );
   
-          // Send response
-          res.json({
-              totalSale,
-              nagad,
-              due,
-          });
+          res.json(totals);
       } catch (error) {
-          console.error('Error fetching data:', error);
+          console.error(error);
           res.status(500).json({ error: 'Internal Server Error' });
       }
   });
 
-    
+
+  
+
+
 
   } finally {
 
