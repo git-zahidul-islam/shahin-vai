@@ -81,7 +81,7 @@ const CashAmount = () => {
                                 type="number"
                                 id="subtotal"
                                 name="subtotal"
-                                className="border p-1 rounded w-[80%] outline-none"
+                                className="border p-1 rounded w-[80%] outline-none bg-black/20"
                                 {...register("subtotal")}
                             />
                         </div>
@@ -110,7 +110,7 @@ const CashAmount = () => {
                                 id="totalAmount"
                                 name="totalAmount"
                                 placeholder="0"
-                                className="border p-1 rounded w-full outline-none"
+                                className="border p-1 rounded w-full outline-none bg-black/20"
                                 readOnly
                                 {...register("totalAmount")}
                             />
@@ -141,7 +141,7 @@ const CashAmount = () => {
                                 type="number"
                                 id="due"
                                 name="due"
-                                className="border p-1 rounded w-full outline-none bg-black/80"
+                                className="border p-1 rounded w-full outline-none bg-black/20"
                                 readOnly
                                 {...register("due")}
                             />

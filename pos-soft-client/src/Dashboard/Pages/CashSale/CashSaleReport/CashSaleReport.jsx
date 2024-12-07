@@ -19,16 +19,17 @@ const CashSaleReport = () => {
     <div className="p-4 overflow-x-auto">
       <table className="min-w-full bg-white border border-gray-300">
         <thead>
-          <tr className="bg-gray-200 text-left">
-            <th className="px-4 py-2 border">SL</th>
-            <th className="px-4 py-2 border">Date</th>
-            <th className="px-4 py-2 border">Customer Name</th>
-            <th className="px-4 py-2 border">Products</th>
-            <th className="px-4 py-2 border">Address</th>
-            <th className="px-4 py-2 border">Mobile</th>
-            <th className="px-4 py-2 border">Due</th>
-            <th className="px-4 py-2 border">Total Price</th>
+          <tr className="bg-[#EA4877] text-left text-white">
+            <th className="px-4 py-2 border">ক্রমিক</th>
+            <th className="px-4 py-2 border">তারিখ</th>
+            <th className="px-4 py-2 border">ক্রেতার নাম</th>
+            <th className="px-4 py-2 border">পণ্য</th>
+            <th className="px-4 py-2 border">ঠিকানা</th>
+            <th className="px-4 py-2 border">মোবাইল</th>
+            <th className="px-4 py-2 border">বাকি</th>
+            <th className="px-4 py-2 border">মোট মূল্য</th>
           </tr>
+
         </thead>
         <tbody>
           {data.map((row) => (

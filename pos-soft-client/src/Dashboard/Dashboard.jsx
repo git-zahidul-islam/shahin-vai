@@ -77,7 +77,7 @@ const Dashboard = () => {
     };
 
     return (
-        <section className="w-full h-screen bg-red-200 px-1 py-2 mb-3 overflow-y-auto">
+        <section className="w-full h-screen bg-red-200 px-1 py-2 mb-3 overflow-y-hidden">
             <div className="grid grid-cols-2 md:grid-cols-4 md:gap-4 gap-2">
                 <div className="bg-red-500/70 text-white p-6 h-full text-center rounded-[100%] shadow-md">
                     <h2 className="md:text-lg text-sm font-bold">মোট প্রোডাক্ট</h2>

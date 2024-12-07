@@ -126,73 +126,74 @@ export default function CustomerTable() {
 
     return (
         <div className="container mx-auto p-4">
-            <h2 className="text-2xl font-bold mb-4 py-3 text-center bg-[#dc4b76f5]">Baki customer Sale report & Pay</h2>
-            
+            <h2 className="text-2xl font-bold mb-4 py-3 text-center bg-[#dc4b76f5]">বাকী বিক্রয় রিপোর্ট এবং পরিশোধ</h2>
+
             {
-                customers && customers.length == 0 
-                ?
-                <div className='h-[50vh]'>
-                    <p className='text-4xl'>no customer sale</p>
-                </div>
-                :
-                
-                <section>
-            <input
-                type="text"
-                placeholder="Search by name"
-                className="w-full p-3 mb-4 border border-red-700 rounded-lg shadow-sm bg-red-200 text-black"
-            />
+                customers && customers.length == 0
+                    ?
+                    <div className='h-[50vh]'>
+                        <p className='text-4xl'>no customer sale</p>
+                    </div>
+                    :
 
-            {/* Responsive Table */}
-            <div className="overflow-x-auto text-sm">
-                <table className="min-w-full bg-white shadow-md rounded-lg">
-                    <thead className="bg-red-200">
-                        <tr>
-                            <th className="py-3 px-6 text-left">ক্রমিক </th>
-                            <th className="py-3 px-6 text-left">নাম</th>
-                            <th className="py-3 px-6 text-left">মোবাইল</th>
-                            <th className="py-3 px-6 text-left">ঠিকানা</th>
-                            <th className="py-3 px-6 text-left">salse Date</th>
-                            <th className="py-3 px-6 text-left">মোট বাকী</th>
-                            <th className="py-3 px-6 text-left">Give Date</th>
-                            <th className="py-3 px-6 text-left">জমা </th>
-                            <th className="py-3 px-6 text-left">বিবরণ </th>
-                            <th className="py-3 px-6 text-left">delete</th>
-                        </tr>
-                    </thead>
+                    <section>
+                        <input
+                            type="text"
+                            placeholder="Search by name"
+                            className="w-full p-3 mb-4 border border-red-700 rounded-lg shadow-sm bg-red-200 text-black"
+                        />
 
-                    <tbody>
-                        {
-                            customers.map((customer, index) => {
-                                return (
-                                    <tr key={customer._id} className="bg-gray-100">
-                                        <td className="py-3 px-6">{index + 1}</td>
-                                        <td className="py-3 px-6">{customer.customerData?.label}</td>
-                                        <td className="py-3 px-6">{customer.customerData?.mobile}</td>
-                                        <td className="py-3 px-6">{customer.customerData?.address}</td>
-                                        <td className="py-3 px-6">{customer.date ? customer.date : "No Date"}</td>
-                                        <td className="py-3 px-6">{customer.due}</td>
-                                        <td className="py-3">
-                                            <input className='p-2 w-[120px]' type="date" name="paidDate" id="paidDate" onChange={(e) => setpaidDate(e.target.value)} />
-                                        </td>
-                                        <td className="py-3 px-[3px] flex">
-                                            <input className='w-[110px] border border-red-600/65 outline-none p-1' type="number" onChange={(e) => setPayammount(e.target.value)} />
-                                            <button onClick={() => handlePay(customer)} className='bg-red-500 px-3 py-2 text-white ml-2 w-1/3'>Pay</button>
-                                        </td>
-                                        <td>
-                                            <Link to={`/dashboard/customer-info/${customer._id}`} className='bg-[#e94374f5] text-white font-semibold px-3 py-2 mt-2 rounded-md'>সব দেখুন </Link>
-                                        </td>
-                                        <td className="">
-                                            <button onClick={() => handleDelete(customer._id)} className='bg-red-600/85 text-white font-semibold px-2 py-[6px] rounded-md'>Delete</button>
-                                        </td>
+                        {/* Responsive Table */}
+                        <div className="overflow-x-auto text-sm">
+                            <table className="min-w-full bg-white shadow-md rounded-lg">
+                                <thead className="bg-red-200">
+                                    <tr className=''>
+                                        <th className="py-3">ক্রমিক</th>
+                                        <th className="py-3">নাম</th>
+                                        <th className="py-3">মোবাইল</th>
+                                        <th className="py-3">ঠিকানা</th>
+                                        <th className="py-3">বিক্রয়ের তারিখ</th>
+                                        <th className="py-3">মোট বাকি</th>
+                                        <th className="py-3">জমা দেওয়ার তারিখ</th>
+                                        <th className="py-3">জমা</th>
+                                        <th className="py-3">বিবরণ</th>
+                                        <th className="py-3 ">মুছে ফেলুন</th>
+                        
                                     </tr>
-                                )
-                            })
-                        }
-                    </tbody>
-                </table>
-            </div>
-            </section>
+                                </thead>
+
+                                <tbody>
+                                    {
+                                        customers.map((customer, index) => {
+                                            return (
+                                                <tr key={customer._id} className="bg-gray-100">
+                                                    <td className="py-3 px-6">{index + 1}</td>
+                                                    <td className="py-3 px-6">{customer.customerData?.label}</td>
+                                                    <td className="py-3 px-6">{customer.customerData?.mobile}</td>
+                                                    <td className="py-3 px-6">{customer.customerData?.address}</td>
+                                                    <td className="py-3 px-6">{customer.date ? customer.date : "No Date"}</td>
+                                                    <td className="py-3 px-6">{customer.due}</td>
+                                                    <td className="py-3">
+                                                        <input className='p-2 w-[120px]' type="date" name="paidDate" id="paidDate" onChange={(e) => setpaidDate(e.target.value)} />
+                                                    </td>
+                                                    <td className="py-3 px-[3px] flex">
+                                                        <input className='w-[110px] border border-red-600/65 outline-none p-1' type="number" onChange={(e) => setPayammount(e.target.value)} />
+                                                        <button onClick={() => handlePay(customer)} className='bg-red-500 px-3 py-2 text-white ml-2 w-1/3'>Pay</button>
+                                                    </td>
+                                                    <td>
+                                                        <Link to={`/dashboard/customer-info/${customer._id}`} className='bg-[#e94374f5] text-white font-semibold px-3 py-2 mt-2 rounded-md'>সব দেখুন </Link>
+                                                    </td>
+                                                    <td className="">
+                                                        <button onClick={() => handleDelete(customer._id)} className='bg-red-600/85 text-white font-semibold px-2 py-[6px] rounded-md'>Delete</button>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
             }
         </div>
     );
