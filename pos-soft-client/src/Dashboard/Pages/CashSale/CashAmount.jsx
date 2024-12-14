@@ -2,8 +2,12 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { useAuth } from "../../../provider/useAuth";
 import axios from "axios";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+
 
 const CashAmount = () => {
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
@@ -12,7 +16,7 @@ const CashAmount = () => {
         reset,
         formState: { errors },
     } = useForm();
-    const { cashSubTotal, cashCart, formData, resetCart } = useAuth();
+    const { cashSubTotal, cashCart, formData, resetCart,setInvoiceId } = useAuth();
     const cart = cashCart || [];
 
     // Initialize subtotal and watch inputs
@@ -27,8 +31,8 @@ const CashAmount = () => {
     // Real-time validation for cashPaid
     const totalAmount = parseFloat(subtotal || 0) * (1 - parseFloat(discount || 0) / 100);
     const cashPaidError =
-        parseFloat(cashPaid) > totalAmount
-            ? "ক্যাশ জমা মোট টাকা থেকে বেশি হতে পারবে না!"
+        parseFloat(cashPaid) !== totalAmount
+            ? "ক্যাশ জমা মোট টাকার সমান হতে হবে।"
             : parseFloat(cashPaid) < 0
             ? "ক্যাশ জমা ঋণাত্মক হতে পারবে না!"
             : null;
@@ -36,16 +40,31 @@ const CashAmount = () => {
     useEffect(() => {
         const discountedAmount = parseFloat(subtotal || 0) * (1 - parseFloat(discount || 0) / 100);
         setValue("totalAmount", discountedAmount);
-        const remainingDue = discountedAmount - parseFloat(cashPaid || 0);
-        setValue("due", remainingDue);
-    }, [subtotal, discount, cashPaid, setValue]);
+    }, [subtotal, discount, setValue]);
 
     const onSubmit = async (data) => {
         if (!cashPaidError) {
-            // console.log("Form Data:", { payments: data, products: cart, customerData: formData });
-            const res = await axios.post('http://localhost:5000/nagad-sale', { ...data, products: cart, customerData: formData })
-            // if(res.data.insertedId)
-            console.log(res.data);
+            const cashPaidNumber = parseFloat(data.cashPaid);
+
+            // { ...data, products: cart, customerData: formData }
+
+            // console.log({...data, cashPaid: cashPaidNumber,products: cart, customerData: formData});
+            
+            const res = await axios.post('http://localhost:5000/nagad-sale', {...data, cashPaid: cashPaidNumber,products: cart, customerData: formData});
+            console.log("cash added",res.data);
+            if (res) {
+                const productId = res?.data?.insertedId;
+                setInvoiceId(productId);
+
+                Swal.fire({
+                    title: "প্রিন্ট হবে!",
+                    text: "ডকুমেন্ট প্রিন্টের জন্য প্রস্তুত ",
+                    icon: "success"
+                });
+
+                navigate(`/dashboard/nagad-salse-invoice/${productId}`);
+
+            }
             reset();
             resetCart();
         }
@@ -132,19 +151,6 @@ const CashAmount = () => {
                             {cashPaidError && (
                                 <p className="text-red-500 text-sm mt-1">{cashPaidError}</p>
                             )}
-                        </div>
-
-                        {/* Previous Due */}
-                        <div className="mb-1 w-[60%]">
-                            <label htmlFor="due" className="mr-2">বাকী</label>
-                            <input
-                                type="number"
-                                id="due"
-                                name="due"
-                                className="border p-1 rounded w-full outline-none bg-black/20"
-                                readOnly
-                                {...register("due")}
-                            />
                         </div>
 
                         {/* Submit Button */}

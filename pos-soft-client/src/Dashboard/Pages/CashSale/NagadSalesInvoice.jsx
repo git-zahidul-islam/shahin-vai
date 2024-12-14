@@ -3,18 +3,15 @@ import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import bg from '../../../../public/bg.png';
 
-const SalesInvoice = () => {
+const NagadSalesInvoice = () => {
     const [salesData, setSalesData] = useState(null);
     const [banglaWord, setBanglaWord] = useState('');
     const { id } = useParams();
     const invoiceRef = useRef();
 
-    console.log(id);
-
-
     useEffect(() => {
         const allSalesData = async () => {
-            const res = await axios.get(`http://localhost:5000/all-sales-data/${id}`);
+            const res = await axios.get(`http://localhost:5000/nagad-salse-invoice/${id}`);
             setSalesData(res.data);
             console.log(res.data);
         };
@@ -74,7 +71,7 @@ const SalesInvoice = () => {
                                 <span className="font-semibold">ইনভয়েজ নাম্বার:</span> {id}
                             </p>
                             <p>
-                                <span className="font-semibold">তারিখ :</span> {salesData?.customerData?.date}
+                                <span className="font-semibold">তারিখ :</span> {salesData?.date}
                             </p>
 
                         </div>
@@ -84,13 +81,13 @@ const SalesInvoice = () => {
                         {salesData && (
                             <div>
                                 <p>
-                                    <strong>ক্রেতার নাম</strong>: {salesData.label}
+                                    <strong>ক্রেতার নাম</strong>: {salesData.customerData?.customerName}
                                 </p>
                                 <p>
-                                    <strong>মোবাইল</strong>: {salesData.mobile}
+                                    <strong>মোবাইল</strong>: {salesData.customerData?.mobile}
                                 </p>
                                 <p>
-                                    <strong>ঠিকানা</strong>: {salesData.address}
+                                    <strong>ঠিকানা</strong>: {salesData.customerData?.address}
                                 </p>
                             </div>
                         )}
@@ -144,7 +141,7 @@ const SalesInvoice = () => {
                                             <strong>টাকা:</strong>
                                         </td>
                                         <td className="text-right px-4 font-semibold">
-                                            {salesData?.subtotal} <span className="font-extrabold"> ৳</span> </td>
+                                            {salesData?.subtotal}<span className="font-extrabold"> ৳</span> </td>
                                     </tr>
                                     <tr className="border border-gray-500">
                                         <td className="text-right pr-4 px-2">
@@ -152,30 +149,19 @@ const SalesInvoice = () => {
                                         </td>
                                         <td className="text-right px-4">{salesData?.discount}<span className="font-extrabold"> ৳</span> </td>
                                     </tr>
-                                    {/* <tr className="border border-gray-500">
-                                        <td className="text-right pr-4 px-2">
-                                            <strong>ভ্যাট:</strong>
-                                        </td>
-                                        <td className="text-right px-4">{salesData?.vat}<span className="font-extrabold"> %</span> </td>
-                                    </tr> */}
-                                    {/* <tr className="border border-gray-500">
-                                        <td className="text-right pr-4 px-2">
-                                            <strong>লেবার/গাড়ি বিল:</strong>
-                                        </td>
-                                        <td className="text-right px-4">{salesData?.transport}<span className="font-extrabold"> ৳</span> </td>
-                                    </tr> */}
+                                    
                                     <tr className="border border-gray-500">
                                         <td className="text-right pr-4 px-2">
                                             <strong>জমার পরিমাণ:</strong>
                                         </td>
                                         <td className="text-right px-4">{salesData?.cashPaid}<span className="font-extrabold"> ৳</span> </td>
                                     </tr>
-                                    <tr className="border border-gray-500">
+                                    {/* <tr className="border border-gray-500">
                                         <td className="text-right pr-4  px-2">
                                             <strong>বাকী:</strong>
                                         </td>
                                         <td className="text-right px-4">{salesData?.due}<span className="font-extrabold"> ৳</span> </td>
-                                    </tr>
+                                    </tr> */}
                                     <tr className="border border-gray-500">
                                         <td className="text-right pr-4  px-2">
                                             <strong>মোট টাকা:</strong>
@@ -193,11 +179,7 @@ const SalesInvoice = () => {
                     {/* Amount in Words */}
                     <div className="mt-10 font-semibold flex justify-between items-center">
                         <p>
-                            কথায় :
-                            <span className='text-sm'>
-                                {banglaWord}
-                                টাকা মাত্র ।
-                            </span>
+                            কথায় : <span className='text-sm'>{banglaWord} টাকা মাত্র।</span>
                         </p>
 
 
@@ -226,4 +208,6 @@ const SalesInvoice = () => {
         </div>
     );
 };
-export default SalesInvoice;
+export default NagadSalesInvoice;
+
+// NagadSalesInvoice

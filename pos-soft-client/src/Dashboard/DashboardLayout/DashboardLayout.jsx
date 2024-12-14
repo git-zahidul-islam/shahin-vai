@@ -20,7 +20,6 @@ const DashboardLayout = () => {
                     <li className="hover:underline"><Link className="text-base font-semibold" to="products-list">সকল পণ্য</Link></li>
                     <li className="hover:underline"><Link className="text-base font-semibold" to='customer-info'>বাকী বিক্রয় রিপোর্ট এবং পরিশোধ</Link></li>
                     <li className="hover:underline"><Link className="text-base font-semibold" to='add-product'>পণ্য যোগ করুন</Link></li>
-                    <li className="hover:underline"><Link className="text-base font-semibold" to='add-customer'>কাস্টমার যোগ করুন</Link></li>
                     <li className="hover:underline"><Link className="text-base font-semibold" to='cash-sales'>নগদ বিক্রয়</Link></li>
                     <li className="hover:underline"><Link className="text-base font-semibold" to='cash-sales-report'>নগদ বিক্রয় রিপোর্ট</Link></li>
                     <li className="hover:underline"><Link className="text-base font-semibold" to='products-buy'>কোম্পানি থেকে ক্রয়</Link></li>
