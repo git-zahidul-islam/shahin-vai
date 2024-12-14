@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const CashSaleReport = () => {
   const [data, setData] = useState([]);
@@ -9,6 +10,7 @@ const CashSaleReport = () => {
     axios.get("http://localhost:5000/nagad-sale-report")
       .then((response) => {
         setData(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -26,8 +28,8 @@ const CashSaleReport = () => {
             <th className="px-4 py-2 border">পণ্য</th>
             <th className="px-4 py-2 border">ঠিকানা</th>
             <th className="px-4 py-2 border">মোবাইল</th>
-            <th className="px-4 py-2 border">বাকি</th>
             <th className="px-4 py-2 border">মোট মূল্য</th>
+            <th>print</th>
           </tr>
 
         </thead>
@@ -40,8 +42,10 @@ const CashSaleReport = () => {
               <td className="px-4 py-2 border">{row.products}</td>
               <td className="px-4 py-2 border">{row.address}</td>
               <td className="px-4 py-2 border">{row.mobile}</td>
-              <td className="px-4 py-2 border">{row.due}</td>
               <td className="px-4 py-2 border">{row.totalPrice}</td>
+              <td>
+                <Link to={`/dashboard/nagad-salse-invoice/${row.id}`} className="p-2 bg-slate-800">Print</Link>
+              </td>
             </tr>
           ))}
         </tbody>

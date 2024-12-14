@@ -27,12 +27,21 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    const userCollections = client.db('pos-soft').collection('users');
-    const productCollections = client.db('pos-soft').collection('products');
-    const customerCollections = client.db('pos-soft').collection('customers');
-    const salesCollections = client.db('pos-soft').collection('sales');
-    const nagadSalesCollections = client.db('pos-soft').collection('nagad-sales');
-    const productsBuyCollections = client.db('pos-soft').collection('productsBuy');
+    // const userCollections = client.db('pos-soft').collection('users');
+    // const productCollections = client.db('pos-soft').collection('products');
+    // const customerCollections = client.db('pos-soft').collection('customers');
+    // const salesCollections = client.db('pos-soft').collection('sales');
+    // const nagadSalesCollections = client.db('pos-soft').collection('nagad-sales');
+    // const productsBuyCollections = client.db('pos-soft').collection('productsBuy');
+
+    // dev-pos
+    const userCollections = client.db('dev-pos').collection('users');
+    const productCollections = client.db('dev-pos').collection('products');
+    const customerCollections = client.db('dev-pos').collection('customers');
+    const salesCollections = client.db('dev-pos').collection('sales');
+    const nagadSalesCollections = client.db('dev-pos').collection('nagad-sales');
+    const productsBuyCollections = client.db('dev-pos').collection('productsBuy');
+
 
     // get users from db
     app.get('/users', async (req, res) => {
@@ -435,6 +444,17 @@ async function run() {
       }
     });
 
+    app.get("/nagad-salse-invoice/:id", async (req, res) => {
+      try {
+        const query = req.params
+        console.log("inviice", query);
+        const products = await nagadSalesCollections.findOne({ _id: new ObjectId(query) });
+        res.status(200).json(products);
+      } catch (error) {
+        res.status(500).json({ error: "Failed to fetch products info" });
+      }
+    });
+
     // create products
     app.post('/company-products', async (req, res) => {
       try {
@@ -666,6 +686,7 @@ async function run() {
 
         // Format the data for the frontend
         const formattedData = documents.map((item, index) => ({
+          id: item._id,
           sl: index + 1,
           date: item.date,
           customerName: item.customerData.customerName,

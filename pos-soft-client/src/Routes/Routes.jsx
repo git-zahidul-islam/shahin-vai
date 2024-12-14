@@ -11,13 +11,10 @@ import AllProducts from "../Dashboard/Pages/AllProducts/AllProducts";
 import AllReturn from "../Dashboard/Pages/AllReturn/AllReturn";
 import AllSalesReport from "../Dashboard/Pages/AllSalesReport/AllSalesReport";
 import CustomerInfo from "../Dashboard/Pages/CustomerInfo/CustomerInfo";
-import ReturnProductsAdd from "../Dashboard/Pages/ReturnProductsAdd/ReturnProductsAdd";
 import SalesReport from "../Dashboard/Pages/SalesReport/SalesReport";
-import Stock from "../Dashboard/Pages/Stock/Stock";
 import Sales from "../Dashboard/Pages/Sales/Sales";
 import UpdateProduct from "../Dashboard/Pages/UpdateProducts/UpdateProduct";
 import ProductsList from "../Dashboard/Pages/ProductList/ProductList";
-import AddCustomer from "../Dashboard/Pages/AddCustomer/AddCustomer";
 import SalesInvoice from "../Dashboard/Pages/SalesInvoice/SalesInvoice";
 import ProductsBuy from "../Dashboard/Pages/ProductsBuy/ProductsBuy"
 import PurchaseReport from "../Dashboard/Pages/PurchaseReport/PurchaseReport"
@@ -27,6 +24,7 @@ import PrivateRoute from "./PrivateRoute";
 import PublicPage from "./PrblicPage";
 import CashSale from "../Dashboard/Pages/CashSale/CashSale";
 import CashSaleReport from "../Dashboard/Pages/CashSale/CashSaleReport/CashSaleReport";
+import NagadSalesInvoice from "../Dashboard/Pages/CashSale/NagadSalesInvoice";
 
 
 export const router = createBrowserRouter([
@@ -67,9 +65,9 @@ export const router = createBrowserRouter([
                 element: <PrivateRoute><SalesInvoice /></PrivateRoute>
             },
             {
-                path: 'sales-print/:id',  // Dynamic route for Sales Invoice
-                element: <PrivateRoute><SalesInvoice /></PrivateRoute>
-              },
+                path: 'nagad-salse-invoice/:id',  // Dynamic route for Sales Invoice
+                element: <PrivateRoute> <NagadSalesInvoice/> </PrivateRoute>
+            },
             {
                 path: 'all-products',
                 element: <PrivateRoute><AllProducts /></PrivateRoute>
@@ -91,24 +89,12 @@ export const router = createBrowserRouter([
                 element: <PrivateRoute><CustomerInfoDetails /></PrivateRoute>
             },
             {
-                path: 'add-return',
-                element: <PrivateRoute><ReturnProductsAdd /></PrivateRoute>
-            },
-            {
                 path: 'sales-report',
                 element: <PrivateRoute><SalesReport /></PrivateRoute>
             },
             {
-                path: 'stock',
-                element: <PrivateRoute><Stock /></PrivateRoute>
-            },
-            {
                 path: 'products-list',
                 element: <PrivateRoute><ProductsList /></PrivateRoute>
-            },
-            {
-                path: 'add-customer',
-                element: <PrivateRoute><AddCustomer /></PrivateRoute>
             },
             // this is products buy route
             {
