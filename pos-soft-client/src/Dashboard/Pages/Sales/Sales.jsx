@@ -206,7 +206,7 @@ const ContractForm = () => {
 
 
       {/* Product Details */}
-     <h2 className="text-lg font-bold text-gray-700 mb-4">Product Details</h2>
+      <h2 className="text-lg font-bold text-gray-700 mb-4">Product Details</h2>
       {products.map((product, index) => (
         <div key={index} className="grid grid-cols-3 gap-4 mb-6">
           <div>
