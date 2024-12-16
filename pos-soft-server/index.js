@@ -315,7 +315,7 @@ async function run() {
 
     // });
 
-    // this is right - zahid::: -7:10 pm
+    // this is right - zahid::: -7:10 pm "it not useable for latest"
     app.post('/changeable', async (req, res) => {
       const salesData = req.body;
       const {
@@ -356,6 +356,15 @@ async function run() {
       }
     });
 
+    app.post('/api/v1/sales',async(req,res)=>{
+      const salesData = req.body;
+      try {
+        const saleProducts = await salesCollections.insertOne(salesData);
+        res.status(200).send(saleProducts);
+      } catch (error) {
+        res.status(500).json({ message: "Failed to process request", error });
+      }
+    })
 
     // customer paymented data delete
     app.delete('/paid-data-delete/:id', async (req, res) => {
